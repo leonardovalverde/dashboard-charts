@@ -4,4 +4,5 @@ export interface IUser {
   id: number;
   name: string;
   unitId: number;
+  isLogged?: boolean;
 }
