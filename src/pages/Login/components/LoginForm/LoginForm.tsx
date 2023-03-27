@@ -1,4 +1,4 @@
-import { Input, Button, Typography, Avatar } from "antd";
+import { Input, Button, Avatar } from "antd";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import {
   Container,
@@ -7,10 +7,9 @@ import {
   RightAlignedItem,
   StyledForm,
 } from "./styles";
-import useAuth from "../../../../hooks/useAuth";
+import useAuth from "hooks/useAuth";
 import { useMemo } from "react";
-
-const { Text } = Typography;
+import Text from "components/Typography/Text";
 
 const LoginForm = (): JSX.Element => {
   const { signIn, error } = useAuth();
