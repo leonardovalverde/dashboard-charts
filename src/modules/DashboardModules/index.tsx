@@ -1,15 +1,11 @@
 import { modules } from "./constants";
-
-interface DashboardModulesRenderProps {
-  current: string;
-}
+import { DashboardModulesRenderProps } from "./types";
 
 const DashboardModulesRender = ({
   current,
+  userData,
 }: DashboardModulesRenderProps): JSX.Element => {
-  console.log(current);
-
-  return <>{modules[current]}</>;
+  return <>{modules(userData)[current]}</>;
 };
 
 export default DashboardModulesRender;
