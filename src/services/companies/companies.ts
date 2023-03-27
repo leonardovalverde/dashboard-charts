@@ -7,7 +7,9 @@ export const getCompanies = async (): Promise<ICompany[]> => {
   return response.data;
 };
 
-export const getCompanyById = async (id: string): Promise<ICompany> => {
+export const getCompanyById = async (
+  id: string | number
+): Promise<ICompany> => {
   const response = await axios.get(endpoints.companies.getById(id));
   return response.data;
 };
