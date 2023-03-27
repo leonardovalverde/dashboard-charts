@@ -1,13 +1,18 @@
-import axios from "axios";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { endpoints } from "../endpoints";
 import { IAsset } from "./types";
 
-export const getAssets = async (): Promise<IAsset[]> => {
-  const response = await axios.get(endpoints.assets.getAll);
-  return response.data;
-};
+export const assets = createApi({
+  reducerPath: "assets",
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_BASE_URL }),
+  endpoints: (builder) => ({
+    getAllAssets: builder.query<IAsset[], void>({
+      query: () => endpoints.assets.getAll,
+    }),
+    getAssetsById: builder.query<IAsset, string>({
+      query: (id: number | string) => endpoints.assets.getById(id),
+    }),
+  }),
+});
 
-export const getAssetById = async (id: string): Promise<IAsset> => {
-  const response = await axios.get(endpoints.assets.getById(id));
-  return response.data;
-};
+export const { useGetAllAssetsQuery, useGetAssetsByIdQuery } = assets;
