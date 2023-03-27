@@ -1,11 +1,8 @@
-import { ReactNode, useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
-import { IUserState } from "../../store/slice/userSlice";
-
-interface ProtectedRouteProps {
-  children: ReactNode;
-}
+import { IUserState } from "store/slice/userSlice";
+import { ProtectedRouteProps } from "./types";
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const isLogged = useSelector((state: IUserState) => state.user.isLogged);
