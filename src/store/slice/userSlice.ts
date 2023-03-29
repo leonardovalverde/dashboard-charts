@@ -14,6 +14,7 @@ export const userSlice = createSlice({
     name: "",
     unitId: 0,
     isLogged: false,
+    isAdmin: false,
   } as IUser,
   reducers: {
     setUser: (state: IUser, { payload }) => {
