@@ -19,6 +19,7 @@ const Notifications = ({ assets }: NotificationsProps): JSX.Element => {
                 <Badge.Ribbon
                   text={StatusTranslate[asset.status]}
                   color={getColorByStatus(asset.status)}
+                  key={asset.id}
                 >
                   <Card title={asset.name} size="small">
                     Atenção! O ativo <strong>{asset.name}</strong> está com
