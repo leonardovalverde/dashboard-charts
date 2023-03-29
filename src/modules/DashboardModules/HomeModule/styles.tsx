@@ -20,6 +20,8 @@ const ChartWrapper = styled.div<{ backgroundColor?: string }>`
   height: 100%;
   display: flex;
   width: 100%;
+  justify-content: center;
+  align-items: center;
 `;
 
 const NotificationWrapper = styled.div`
@@ -32,4 +34,19 @@ const NotificationWrapper = styled.div`
   gap: ${spacings.x5}px;
 `;
 
-export { Container, ChartContainer, ChartWrapper, NotificationWrapper };
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  background-color: ${blue[0]};
+`;
+
+export {
+  Container,
+  ChartContainer,
+  ChartWrapper,
+  NotificationWrapper,
+  LoadingContainer,
+};

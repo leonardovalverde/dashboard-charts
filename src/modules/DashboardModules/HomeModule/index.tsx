@@ -8,11 +8,13 @@ import {
   ChartContainer,
   ChartWrapper,
   Container,
+  LoadingContainer,
   NotificationWrapper,
 } from "./styles";
 import HealthChart from "./components/HealthChart/HealthChart";
 import StatusChart from "./components/StatusChart/StatusChart";
 import Notifications from "./components/Notifications/Notifications";
+import { Spin } from "antd";
 
 const HomeModule = ({ userData }: HomeModuleProps): JSX.Element => {
   const [assets, setAssets] = useState<IAsset[]>([]);
@@ -20,27 +22,35 @@ const HomeModule = ({ userData }: HomeModuleProps): JSX.Element => {
   const { data, isLoading, error } = useGetAllAssetsQuery();
 
   useEffect(() => {
-    if (data) {
+    if (data && userData.isAdmin) {
+      setAssets(data);
+    } else if (data) {
       setAssets(getOnlyAsignedAssets(data, userData.id));
     }
-  }, [data, userData.id]);
-
-  console.log(assets);
+  }, [data, userData.id, userData.isAdmin]);
 
   return (
-    <Container>
-      <ChartContainer>
-        <ChartWrapper>
-          <HealthChart assets={assets} />
-        </ChartWrapper>
-        <ChartWrapper backgroundColor={blue[1]}>
-          <StatusChart assets={assets} />
-        </ChartWrapper>
-      </ChartContainer>
-      <NotificationWrapper>
-        <Notifications assets={assets} />
-      </NotificationWrapper>
-    </Container>
+    <>
+      {isLoading ? (
+        <LoadingContainer>
+          <Spin />
+        </LoadingContainer>
+      ) : (
+        <Container>
+          <ChartContainer>
+            <ChartWrapper>
+              <HealthChart assets={assets} />
+            </ChartWrapper>
+            <ChartWrapper backgroundColor={blue[1]}>
+              <StatusChart assets={assets} />
+            </ChartWrapper>
+          </ChartContainer>
+          <NotificationWrapper>
+            <Notifications assets={assets} />
+          </NotificationWrapper>
+        </Container>
+      )}
+    </>
   );
 };
 
