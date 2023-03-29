@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Spin, Tag } from "antd";
 import { type ColumnsType } from "antd/es/table";
 import SortingTable from "components/Table/SortingTable/SortingTable";
@@ -131,7 +131,7 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
         </LoadingWrapper>
       ) : (
         <Container>
-          <ActionHeader />
+          {userData.isAdmin && <ActionHeader />}
           <SortingTable
             data={workOrdersData}
             columns={columns}
