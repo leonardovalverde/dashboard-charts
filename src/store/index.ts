@@ -11,26 +11,42 @@ import {
   PURGE,
   REGISTER,
 } from "redux-persist";
-import { assets } from "services/assets/assets";
+import { assetsQueries } from "services/assets/assets";
+import { unitsQueries } from "services/units/units";
+import { companiesQueries } from "services/companies/companies";
+import { usersQueries } from "services/users/users";
+import { workOrdersQueries } from "services/workOrders/workOrders";
+import { workOrdersReducer } from "./slice/workOrdersSlice";
 
 const persistConfig = {
   key: "root",
   storage,
 };
 
-const persistedReducer = persistReducer(persistConfig, userReducer);
+const userPersistedReducer = persistReducer(persistConfig, userReducer);
 
 export const store = configureStore({
   reducer: {
-    user: persistedReducer,
-    [assets.reducerPath]: assets.reducer,
+    user: userPersistedReducer,
+    workOrders: workOrdersReducer,
+    [assetsQueries.reducerPath]: assetsQueries.reducer,
+    [unitsQueries.reducerPath]: unitsQueries.reducer,
+    [companiesQueries.reducerPath]: companiesQueries.reducer,
+    [usersQueries.reducerPath]: usersQueries.reducer,
+    [workOrdersQueries.reducerPath]: workOrdersQueries.reducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(assets.middleware),
+    }).concat(
+      assetsQueries.middleware,
+      unitsQueries.middleware,
+      companiesQueries.middleware,
+      usersQueries.middleware,
+      workOrdersQueries.middleware
+    ),
 });
 
 export const persistor = persistStore(store);

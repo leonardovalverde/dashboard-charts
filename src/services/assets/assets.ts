@@ -2,8 +2,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { endpoints } from "../endpoints";
 import { IAsset } from "./types";
 
-export const assets = createApi({
-  reducerPath: "assets",
+export const assetsQueries = createApi({
+  reducerPath: "assetsQueries",
   baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_BASE_URL }),
   endpoints: (builder) => ({
     getAllAssets: builder.query<IAsset[], void>({
@@ -15,4 +15,4 @@ export const assets = createApi({
   }),
 });
 
-export const { useGetAllAssetsQuery, useGetAssetsByIdQuery } = assets;
+export const { useGetAllAssetsQuery, useGetAssetsByIdQuery } = assetsQueries;

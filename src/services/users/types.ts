@@ -10,4 +10,5 @@ export interface IUser {
   company: ICompany;
   unit: IUnit;
   isLogged?: boolean;
+  isAdmin?: boolean;
 }
