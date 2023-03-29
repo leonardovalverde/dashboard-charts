@@ -1,21 +1,24 @@
-import SortingTable from "components/Table/SortingTable/SortingTable";
 import { useEffect, useState } from "react";
-import { Container, LoadingWrapper } from "./styles";
-import { IAsset } from "services/assets/types";
-import { useGetAllAssetsQuery } from "services/assets/assets";
-import { getColorByScore, getOnlyAsignedAssets } from "../utils/functions";
-import { AssetsModuleProps } from "./types";
 import { Spin, Tag } from "antd";
-import { ColumnsType } from "antd/es/table";
-import { StatusTranslate } from "../HomeModule/constants";
+import { type ColumnsType } from "antd/es/table";
+import SortingTable from "components/Table/SortingTable/SortingTable";
 import { getColorByStatus } from "modules/DashboardModules/utils/functions";
-import AssetDetails from "./components/AssetDetails/AssetDetails";
+import { useGetAllAssetsQuery } from "services/assets/assets";
+import { type IAsset } from "services/assets/types";
+
 import { blue } from "@ant-design/colors";
+
+import { StatusTranslate } from "../HomeModule/constants";
+import { getColorByScore, getOnlyAsignedAssets } from "../utils/functions";
+
+import AssetDetails from "./components/AssetDetails/AssetDetails";
+import { Container, LoadingWrapper } from "./styles";
+import { type AssetsModuleProps } from "./types";
 
 const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
   const [assets, setAssets] = useState<IAsset[]>([]);
 
-  const { data, isLoading, error } = useGetAllAssetsQuery();
+  const { data, isLoading } = useGetAllAssetsQuery();
 
   useEffect(() => {
     if (data && userData.isAdmin) {

@@ -1,9 +1,15 @@
-import { useState, useEffect } from "react";
+import { useEffect,useState } from "react";
+import { Spin } from "antd";
 import { useGetAllAssetsQuery } from "services/assets/assets";
-import { IAsset } from "services/assets/types";
-import { getOnlyAsignedAssets } from "../utils/functions";
-import { HomeModuleProps } from "./types";
+import { type IAsset } from "services/assets/types";
+
 import { blue } from "@ant-design/colors";
+
+import { getOnlyAsignedAssets } from "../utils/functions";
+
+import HealthChart from "./components/HealthChart/HealthChart";
+import Notifications from "./components/Notifications/Notifications";
+import StatusChart from "./components/StatusChart/StatusChart";
 import {
   ChartContainer,
   ChartWrapper,
@@ -11,15 +17,12 @@ import {
   LoadingContainer,
   NotificationWrapper,
 } from "./styles";
-import HealthChart from "./components/HealthChart/HealthChart";
-import StatusChart from "./components/StatusChart/StatusChart";
-import Notifications from "./components/Notifications/Notifications";
-import { Spin } from "antd";
+import { type HomeModuleProps } from "./types";
 
 const HomeModule = ({ userData }: HomeModuleProps): JSX.Element => {
   const [assets, setAssets] = useState<IAsset[]>([]);
 
-  const { data, isLoading, error } = useGetAllAssetsQuery();
+  const { data, isLoading } = useGetAllAssetsQuery();
 
   useEffect(() => {
     if (data && userData.isAdmin) {

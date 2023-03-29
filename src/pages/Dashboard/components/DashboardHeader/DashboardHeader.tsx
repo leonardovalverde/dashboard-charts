@@ -1,6 +1,8 @@
-import { Dropdown, Image, MenuProps } from "antd";
+import { Dropdown, Image, type MenuProps } from "antd";
+import useAuth from "hooks/useAuth";
+
 import { DownOutlined } from "@ant-design/icons";
-import useAuth from "../../../../hooks/useAuth";
+
 import {
   Container,
   DropDownWrapper,
@@ -9,7 +11,7 @@ import {
   NameContainer,
   StyledText,
 } from "./styles";
-import { DashboardHeaderProps } from "./types";
+import { type DashboardHeaderProps } from "./types";
 
 const logout: MenuProps["items"] = [
   {
@@ -35,7 +37,9 @@ const DashboardHeader = ({ userData }: DashboardHeaderProps): JSX.Element => {
         <Dropdown
           menu={{
             items: logout,
-            onClick: () => signOut(),
+            onClick: () => {
+              signOut();
+            },
           }}
           arrow={true}
         >

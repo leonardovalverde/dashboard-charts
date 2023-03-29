@@ -1,12 +1,14 @@
-import { HighchartsReact } from "highcharts-react-official";
+import { useMemo } from "react";
 import Highcharts from "highcharts";
-import { HealthChartProps } from "./types";
+import { HighchartsReact } from "highcharts-react-official";
 import {
   countAssetsWithStatus,
   getColorByStatus,
 } from "modules/DashboardModules/utils/functions";
-import { useMemo } from "react";
+
 import { StatusTranslate } from "../../constants";
+
+import { type HealthChartProps } from "./types";
 
 
 const StatusChart = ({ assets }: HealthChartProps): JSX.Element => {

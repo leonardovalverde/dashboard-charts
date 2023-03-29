@@ -1,7 +1,8 @@
-import styled from "styled-components";
-import { blue } from "@ant-design/colors";
-import { spacings } from "../../../../ui-tokens/spacings";
 import { Divider, Menu, Typography } from "antd";
+import styled from "styled-components";
+import { spacings } from "ui-tokens/spacings";
+
+import { blue } from "@ant-design/colors";
 import { RadarChartOutlined } from "@ant-design/icons";
 
 const Container = styled.header`
@@ -62,12 +63,12 @@ const DropDownWrapper = styled.div`
 
 export {
   Container,
+  DropDownWrapper,
   HeaderLeftSection,
   HeaderRightSection,
-  StyledDivider,
-  StyledRadarChartOutlined,
-  StyledMenu,
   NameContainer,
+  StyledDivider,
+  StyledMenu,
+  StyledRadarChartOutlined,
   StyledText,
-  DropDownWrapper,
 };

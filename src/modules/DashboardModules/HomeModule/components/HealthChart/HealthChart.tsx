@@ -1,11 +1,12 @@
-import { HighchartsReact } from "highcharts-react-official";
+import { useMemo } from "react";
 import Highcharts from "highcharts";
-import { HealthChartProps } from "./types";
+import { HighchartsReact } from "highcharts-react-official";
 import {
   getColorByScore,
   orderAssetsByScore,
 } from "modules/DashboardModules/utils/functions";
-import { useMemo } from "react";
+
+import { type HealthChartProps } from "./types";
 
 const HealthChart = ({ assets }: HealthChartProps): JSX.Element => {
   const assetsData = useMemo(() => orderAssetsByScore(assets), [assets]);

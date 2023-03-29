@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
 import { endpoints } from "../endpoints";
-import { IAsset } from "./types";
+
+import { type IAsset } from "./types";
 
 export const assetsQueries = createApi({
   reducerPath: "assetsQueries",

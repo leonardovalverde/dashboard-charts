@@ -1,30 +1,27 @@
+import { useEffect,useState } from "react";
 import { Badge, Descriptions, Image, Progress, Spin, Tag } from "antd";
+import Text from "components/Typography/Text";
+import { format } from "date-fns";
+import { StatusTranslate } from "modules/DashboardModules/HomeModule/constants";
+import { getColorByStatus } from "modules/DashboardModules/utils/functions";
 import { useGetAssetsByIdQuery } from "services/assets/assets";
-import { AssetDetailsProps } from "./types";
+import { type IAsset } from "services/assets/types";
 import { useGetCompanyByIdQuery } from "services/companies/companies";
 import { useGetUnitByIdQuery } from "services/units/units";
-import { useState, useEffect } from "react";
-import { IAsset } from "services/assets/types";
-import { ProgressWrapper } from "./styles";
-import { format } from "date-fns";
-import { getColorByStatus } from "modules/DashboardModules/utils/functions";
-import { StatusTranslate } from "modules/DashboardModules/HomeModule/constants";
-import Text from "components/Typography/Text";
+
 import { LoadingWrapper } from "../../styles";
 
+import { ProgressWrapper } from "./styles";
+import { type AssetDetailsProps } from "./types";
+
 const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
-  const { data, isLoading, error } = useGetAssetsByIdQuery(assetId);
+  const { data, isLoading } = useGetAssetsByIdQuery(assetId);
   const [assetData, setAssetData] = useState<IAsset>({} as IAsset);
-  const {
-    data: unitData,
-    isLoading: unitIsLoading,
-    error: unitError,
-  } = useGetUnitByIdQuery(assetData.unitId);
-  const {
-    data: companyData,
-    isLoading: companyIsLoading,
-    error: companyError,
-  } = useGetCompanyByIdQuery(assetData.companyId);
+  const { data: unitData, isLoading: unitIsLoading } = useGetUnitByIdQuery(
+    assetData.unitId
+  );
+  const { data: companyData, isLoading: companyIsLoading } =
+    useGetCompanyByIdQuery(assetData.companyId);
 
   useEffect(() => {
     if (data) {
@@ -72,7 +69,9 @@ const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
           </Descriptions.Item>
           <Descriptions.Item label="Sensores:" span={2}>
             {data?.sensors.map((sensor) => (
-              <Tag color="blue">{sensor}</Tag>
+              <Tag color="blue" key={sensor}>
+                {sensor}
+              </Tag>
             ))}
           </Descriptions.Item>
           <Descriptions.Item label="Saúde:">

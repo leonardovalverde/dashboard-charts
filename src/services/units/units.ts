@@ -1,6 +1,8 @@
-import { endpoints } from "../endpoints";
-import { IUnit } from "./types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+import { endpoints } from "../endpoints";
+
+import { type IUnit } from "./types";
 
 export const unitsQueries = createApi({
   reducerPath: "unitsQueries",

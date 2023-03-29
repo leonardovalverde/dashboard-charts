@@ -1,8 +1,9 @@
-import { MenuProps } from "antd";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { IUserState } from "store/slice/userSlice";
+import { type MenuProps } from "antd";
 import DashboardModulesRender from "modules/DashboardModules";
+import { useSelector } from "react-redux";
+import { type IUserState } from "store/slice/userSlice";
+
 import DashboardHeader from "./components/DashboardHeader/DashboardHeader";
 import DashboardMenu from "./components/DashboardMenu/DashboardMenu";
 import { Container } from "./styles";

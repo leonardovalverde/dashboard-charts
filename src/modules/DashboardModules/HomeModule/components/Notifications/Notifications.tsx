@@ -1,9 +1,11 @@
 import { Badge, Card, Space } from "antd";
 import Title from "components/Typography/Title";
-import { attentionStatus, StatusTranslate } from "../../constants";
-import { Container, NotificationsWrapper, TitleWrapper } from "./styles";
-import { NotificationsProps } from "./types";
 import { getColorByStatus } from "modules/DashboardModules/utils/functions";
+
+import { attentionStatus, StatusTranslate } from "../../constants";
+
+import { Container, NotificationsWrapper, TitleWrapper } from "./styles";
+import { type NotificationsProps } from "./types";
 
 const Notifications = ({ assets }: NotificationsProps): JSX.Element => {
   return (

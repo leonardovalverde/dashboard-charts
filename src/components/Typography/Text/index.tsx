@@ -1,5 +1,6 @@
 import { StyledText } from "../styles";
-import { StyledTextProps } from "./types";
+
+import { type StyledTextProps } from "./types";
 
 const Text = ({
   children,

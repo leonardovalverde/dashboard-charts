@@ -3,10 +3,11 @@ import ptBR from "antd/lib/locale/pt_BR";
 import { Provider } from "react-redux";
 import { RouterProvider } from "react-router-dom";
 import { PersistGate } from "redux-persist/integration/react";
-import router from "./routes/routes";
-import { store } from "./store";
 import { createGlobalStyle } from "styled-components";
+
+import router from "./routes/routes";
 import { persistor } from "./store/index";
+import { store } from "./store";
 
 const GlobalStyle = createGlobalStyle`
   * {

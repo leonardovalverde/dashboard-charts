@@ -1,7 +1,8 @@
-import { IAsset } from "services/assets/types";
-import { red, green, yellow, orange, gray } from "@ant-design/colors";
-import { IUser } from "../../../services/users/types";
-import { IWorkOrder } from "services/workOrders/types";
+import { type IAsset } from "services/assets/types";
+import { type IUser } from "services/users/types";
+import { type IWorkOrder } from "services/workOrders/types";
+
+import { gray,green, orange, red, yellow } from "@ant-design/colors";
 
 const getOnlyAsignedAssets = (assets: IAsset[], userId: number): IAsset[] => {
   const assetsByUser = assets.filter((asset) =>
@@ -70,7 +71,7 @@ const getColorByProgress = (progress: string): string => {
 
 const countAssetsWithStatus = (
   assets: IAsset[]
-): { status: string; count: number }[] => {
+): Array<{ status: string; count: number }> => {
   const inOperation = assets.filter(
     (asset) => asset.status === "inOperation"
   ).length;
@@ -93,7 +94,7 @@ const countAssetsWithStatus = (
 const getAssetsNameByStatus = (
   assets: IAsset[],
   status: string
-): { [key: string]: string[] }[] => {
+): Array<Record<string, string[]>> => {
   const assetsByStatus = assets.filter((asset) => asset.status === status);
   const assetsNames = assetsByStatus.map((asset) => asset.name);
   const assetsNamesByStatus = [{ [status]: assetsNames }];
@@ -126,15 +127,15 @@ const createCheckListArray = (object: any): any[] => {
 };
 
 export {
-  getOnlyAsignedAssets,
-  orderAssetsByScore,
-  getColorByScore,
-  getColorByStatus,
+  countAssetsWithStatus,
+  createCheckListArray,
+  getAssetsNameByStatus,
   getColorByPriority,
   getColorByProgress,
-  countAssetsWithStatus,
-  getAssetsNameByStatus,
+  getColorByScore,
+  getColorByStatus,
+  getOnlyAsignedAssets,
   getUsersOfSameCompany,
   getWorkOrdersByAssignedUserId,
-  createCheckListArray,
+  orderAssetsByScore,
 };

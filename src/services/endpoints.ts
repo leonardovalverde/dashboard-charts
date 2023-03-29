@@ -6,7 +6,8 @@ export const endpoints = {
   },
   users: {
     getAll: `${process.env.REACT_APP_API_BASE_URL}users`,
-    getById: (id: string | number) => `${process.env.REACT_APP_API_BASE_URL}users/${id}`,
+    getById: (id: string | number) =>
+      `${process.env.REACT_APP_API_BASE_URL}users/${id}`,
   },
   units: {
     getAll: `${process.env.REACT_APP_API_BASE_URL}units`,

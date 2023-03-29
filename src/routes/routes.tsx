@@ -1,7 +1,8 @@
+import Dashboard from "pages/Dashboard";
+import { Error } from "pages/Error";
+import Login from "pages/Login";
 import { createBrowserRouter } from "react-router-dom";
-import Dashboard from "../pages/Dashboard";
-import { Error } from "../pages/Error";
-import Login from "../pages/Login";
+
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const router = createBrowserRouter([

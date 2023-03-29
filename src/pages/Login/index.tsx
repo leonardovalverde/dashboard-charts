@@ -1,10 +1,11 @@
-import { useSelector } from "react-redux";
-import { Container, Footer } from "./styles";
-import { Typography } from "antd";
-import LoginForm from "./components/LoginForm/LoginForm";
 import { useEffect } from "react";
+import { Typography } from "antd";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { IUserState } from "../../store/slice/userSlice";
+import { type IUserState } from "store/slice/userSlice";
+
+import LoginForm from "./components/LoginForm/LoginForm";
+import { Container, Footer } from "./styles";
 
 const { Text } = Typography;
 

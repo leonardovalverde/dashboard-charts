@@ -1,7 +1,7 @@
 import { Form } from "antd";
 import styled from "styled-components";
-import { breakpoints } from "../../../../ui-tokens/breakpoints";
-import { spacings } from "../../../../ui-tokens/spacings";
+import { breakpoints } from "ui-tokens/breakpoints";
+import { spacings } from "ui-tokens/spacings";
 
 const Container = styled.div`
   display: grid;
@@ -66,4 +66,4 @@ const RightAlignedItem = styled(Form.Item)`
   }
 `;
 
-export { Container, FormWrapper, QuoteWrapper, StyledForm, RightAlignedItem };
+export { Container, FormWrapper, QuoteWrapper, RightAlignedItem, StyledForm };

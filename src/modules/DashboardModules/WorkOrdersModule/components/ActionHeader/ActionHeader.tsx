@@ -1,25 +1,28 @@
-import { Button, Form, Input, Modal, Select, Space } from "antd";
+import { useState } from "react";
+import { Button, Form, Input, Modal, Select } from "antd";
+import { spacings } from "ui-tokens/spacings";
+
 import { MinusCircleOutlined } from "@ant-design/icons";
+
 import {
   AdminContainer,
   ButtonsWrapper,
   StyledFormItem,
   TaskWrapper,
 } from "./styles";
-import { useState } from "react";
-import { spacings } from "ui-tokens/spacings";
 
 const ActionHeader = (): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
   const [form] = Form.useForm();
 
-  const toggleModal = () => {
+  const toggleModal = (): void => {
     setIsOpen((prev) => !prev);
   };
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   const handleCreateWorkOrder = () => {
     console.log(form.getFieldsValue());
-    //setIsOpen((prev) => !prev);
+    //  setIsOpen((prev) => !prev);
   };
 
   return (
@@ -84,7 +87,7 @@ const ActionHeader = (): JSX.Element => {
               {
                 validator: async (_, tasks) => {
                   if (!tasks || tasks.length < 1) {
-                    return Promise.reject(
+                    return await Promise.reject(
                       new Error("Por favor, insira ao menos uma tarefa")
                     );
                   }
@@ -112,11 +115,20 @@ const ActionHeader = (): JSX.Element => {
                         style={{ width: "100%" }}
                       />
                     </StyledFormItem>
-                    <MinusCircleOutlined onClick={() => remove(name)} />
+                    <MinusCircleOutlined
+                      onClick={() => {
+                        remove(name);
+                      }}
+                    />
                   </TaskWrapper>
                 ))}
                 <Form.Item>
-                  <Button type="dashed" onClick={() => add()}>
+                  <Button
+                    type="dashed"
+                    onClick={() => {
+                      add();
+                    }}
+                  >
                     Adicionar tarefa
                   </Button>
                 </Form.Item>

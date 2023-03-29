@@ -1,5 +1,6 @@
 import styled from "styled-components";
-import { red, green, blue } from "@ant-design/colors";
+
+import { blue,green, red } from "@ant-design/colors";
 
 const Container = styled.div`
   display: flex;

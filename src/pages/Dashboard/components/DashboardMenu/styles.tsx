@@ -20,4 +20,4 @@ const ToggleAdminContainer = styled.div`
   bottom: ${spacings.x4}px;
 `;
 
-export { StyledSider, CompanyContainer, ToggleAdminContainer };
+export { CompanyContainer, StyledSider, ToggleAdminContainer };

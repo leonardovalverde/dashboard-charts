@@ -1,3 +1,11 @@
+import { Menu, Spin, Switch } from "antd";
+import Paragraph from "components/Typography/Paragraph";
+import { useDispatch } from "react-redux/es/exports";
+import { useGetCompanyByIdQuery } from "services/companies/companies";
+import { useGetUnitByIdQuery } from "services/units/units";
+import { setUser } from "store/slice/userSlice";
+import { getItem, type MenuItem } from "utils/functions";
+
 import {
   AppstoreOutlined,
   AreaChartOutlined,
@@ -5,15 +13,9 @@ import {
   SettingOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Menu, Spin, Switch } from "antd";
-import Paragraph from "components/Typography/Paragraph";
-import { getItem, MenuItem } from "utils/functions";
+
 import { CompanyContainer, StyledSider, ToggleAdminContainer } from "./styles";
-import { DashboardMenuProps } from "./types";
-import { useGetUnitByIdQuery } from "services/units/units";
-import { useGetCompanyByIdQuery } from "services/companies/companies";
-import { setUser } from "store/slice/userSlice";
-import { useDispatch } from "react-redux/es/exports";
+import { type DashboardMenuProps } from "./types";
 
 const items: MenuItem[] = [
   getItem("Início", "home", <AreaChartOutlined />),
@@ -40,8 +42,8 @@ const DashboardMenu = ({
   } = useGetCompanyByIdQuery(userData.unitId);
   const dispatch = useDispatch();
 
-  const handleAdminMode = (value: boolean) => {
-    if (value && value === true) {
+  const handleAdminMode = (value: boolean): void => {
+    if (value && value) {
       dispatch(setUser({ ...userData, isAdmin: true }));
     } else {
       dispatch(setUser({ ...userData, isAdmin: false }));
@@ -81,7 +83,9 @@ const DashboardMenu = ({
         <Switch
           checkedChildren="Modo Admin"
           unCheckedChildren="Modo Usuário"
-          onChange={(value) => handleAdminMode(value)}
+          onChange={(value) => {
+            handleAdminMode(value);
+          }}
           defaultChecked={userData.isAdmin}
         />
       </ToggleAdminContainer>

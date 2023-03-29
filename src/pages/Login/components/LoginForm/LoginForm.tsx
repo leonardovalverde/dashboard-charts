@@ -1,5 +1,10 @@
-import { Input, Button, Avatar } from "antd";
+import { useMemo } from "react";
+import { Avatar,Button, Input } from "antd";
+import Text from "components/Typography/Text";
+import useAuth from "hooks/useAuth";
+
 import { ArrowRightOutlined } from "@ant-design/icons";
+
 import {
   Container,
   FormWrapper,
@@ -7,15 +12,12 @@ import {
   RightAlignedItem,
   StyledForm,
 } from "./styles";
-import useAuth from "hooks/useAuth";
-import { useMemo } from "react";
-import Text from "components/Typography/Text";
 
 const LoginForm = (): JSX.Element => {
   const { signIn, error } = useAuth();
 
-  const onFinish = async (values: any) => {
-    signIn(values.email);
+  const onFinish = (values: any): void => {
+    void signIn(values.email);
   };
 
   const shouldShowError = useMemo(() => {

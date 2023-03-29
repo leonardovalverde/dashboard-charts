@@ -1,5 +1,5 @@
 import { modules } from "./constants";
-import { DashboardModulesRenderProps } from "./types";
+import { type DashboardModulesRenderProps } from "./types";
 
 const DashboardModulesRender = ({
   current,

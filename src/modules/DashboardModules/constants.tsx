@@ -1,12 +1,12 @@
-import HomeModule from "./HomeModule/index";
+import { type IUser } from "services/users/types";
+
 import AssetsModule from "./AssetsModule/index";
+import HomeModule from "./HomeModule/index";
 import UnitsModule from "./UnitsModule/index";
 import UsersModule from "./UsersModule/index";
-import { IUser } from "services/users/types";
 import WorkOrdersModule from "./WorkOrdersModule/index";
-interface IModules {
-  [key: string]: JSX.Element;
-}
+
+type IModules = Record<string, JSX.Element>;
 
 const modules = (userData: IUser): IModules => {
   return {
@@ -18,13 +18,13 @@ const modules = (userData: IUser): IModules => {
   };
 };
 
-const translatedPriority: { [key: string]: string } = {
+const translatedPriority: Record<string, string> = {
   high: "Alta",
   medium: "Média",
   low: "Baixa",
 };
 
-const translatedStatus: { [key: string]: string } = {
+const translatedStatus: Record<string, string> = {
   completed: "Concluída",
   "in progress": "Em andamento",
 };

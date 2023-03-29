@@ -1,22 +1,24 @@
-import { ColumnsType } from "antd/es/table";
-import SortingTable from "components/Table/SortingTable/SortingTable";
-import { useState, useEffect } from "react";
-import { IUser } from "services/users/types";
-import { UsersModuleProps } from "./types";
-import { useGetAllUsersQuery } from "services/users/users";
-import { getUsersOfSameCompany } from "../utils/functions";
-import { useGetAllUnitsQuery } from "services/units/units";
-import { Container, LoadingWrapper } from "./styles";
+import { useEffect,useState } from "react";
 import { Spin } from "antd";
+import { type ColumnsType } from "antd/es/table";
+import SortingTable from "components/Table/SortingTable/SortingTable";
+import { useGetAllUnitsQuery } from "services/units/units";
+import { type IUser } from "services/users/types";
+import { useGetAllUsersQuery } from "services/users/users";
+
 import { blue } from "@ant-design/colors";
+
+import { getUsersOfSameCompany } from "../utils/functions";
+
+import { Container, LoadingWrapper } from "./styles";
+import { type UsersModuleProps } from "./types";
 
 const UsersModule = ({ userData }: UsersModuleProps): JSX.Element => {
   const [users, setUsers] = useState<IUser[]>([]);
-  const { data, isLoading, error } = useGetAllUsersQuery();
+  const { data, isLoading } = useGetAllUsersQuery();
   const {
     data: dataUnit,
     isLoading: isLoadingUnit,
-    error: errorUnit,
   } = useGetAllUnitsQuery();
 
   useEffect(() => {

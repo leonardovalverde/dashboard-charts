@@ -1,10 +1,11 @@
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { Navigate, useNavigate } from "react-router-dom";
-import { IUserState } from "store/slice/userSlice";
-import { ProtectedRouteProps } from "./types";
+import { type IUserState } from "store/slice/userSlice";
 
-const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+import { type ProtectedRouteProps } from "./types";
+
+const ProtectedRoute = ({ children }: ProtectedRouteProps): JSX.Element => {
   const isLogged = useSelector((state: IUserState) => state.user.isLogged);
   const navigate = useNavigate();
 

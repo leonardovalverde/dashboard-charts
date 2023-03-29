@@ -1,36 +1,40 @@
+import { useEffect,useState } from "react";
+import { Button, Checkbox, Descriptions, Form, Spin } from "antd";
+import { createCheckListArray } from "modules/DashboardModules/utils/functions";
+import { type IChecklist } from "services/workOrders/types";
 import {
   useGetWorkOrderByIdQuery,
   useUpdateWorkOrderChecklistByIdMutation,
 } from "services/workOrders/workOrders";
-import { WorkOrderDetailsProps } from "./types";
-import { Button, Checkbox, Descriptions, Form, Spin } from "antd";
-import { useState, useEffect } from "react";
-import { createCheckListArray } from "modules/DashboardModules/utils/functions";
-import { OptionWrapper } from "./styles";
-import { IChecklist } from "services/workOrders/types";
 
-const WorkOrderDetails = ({ workOrderId, userData }: WorkOrderDetailsProps) => {
+import { OptionWrapper } from "./styles";
+import { type WorkOrderDetailsProps } from "./types";
+
+const WorkOrderDetails = ({
+  workOrderId,
+  userData,
+}: WorkOrderDetailsProps): JSX.Element => {
   const [checklist, setChecklist] = useState<IChecklist[]>([]);
-  const { data, isLoading, error } = useGetWorkOrderByIdQuery(workOrderId);
+  const { data } = useGetWorkOrderByIdQuery(workOrderId);
   const [updatePost, { isLoading: isUpdating }] =
     useUpdateWorkOrderChecklistByIdMutation();
   const [isDiabled, setIsDisabled] = useState(true);
 
-  const handleChange = () => {
+  const handleChange = (): void => {
     setIsDisabled(false);
   };
 
-  const onFinish = (values: { [key: string]: boolean }) => {
-    updatePost({
+  const onFinish = (values: Record<string, boolean>): void => {
+    void updatePost({
       id: workOrderId,
       checklist: createCheckListArray(values),
     }).unwrap();
   };
 
-  const handleDeleteTask = (task: IChecklist, taskName: string) => {
+  const handleDeleteTask = (task: IChecklist, taskName: string): void => {
     const newChecklist =
-      data?.checklist.filter((item) => item.task !== task.task) || [];
-    updatePost({
+      data?.checklist.filter((item) => item.task !== task.task) ?? [];
+    void updatePost({
       id: workOrderId,
       checklist: newChecklist,
     }).unwrap();
@@ -61,7 +65,9 @@ const WorkOrderDetails = ({ workOrderId, userData }: WorkOrderDetailsProps) => {
                       type="primary"
                       danger
                       htmlType="button"
-                      onClick={() => handleDeleteTask(task, task.task)}
+                      onClick={() => {
+                        handleDeleteTask(task, task.task);
+                      }}
                     >
                       Deletar
                     </Button>

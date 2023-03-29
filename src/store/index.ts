@@ -1,21 +1,23 @@
-import { configureStore } from "@reduxjs/toolkit";
-import storage from "redux-persist/lib/storage";
-import { userReducer } from "./slice/userSlice";
 import {
-  persistStore,
-  persistReducer,
   FLUSH,
-  REHYDRATE,
   PAUSE,
   PERSIST,
+  persistReducer,
+  persistStore,
   PURGE,
   REGISTER,
+  REHYDRATE,
 } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import { assetsQueries } from "services/assets/assets";
-import { unitsQueries } from "services/units/units";
 import { companiesQueries } from "services/companies/companies";
+import { unitsQueries } from "services/units/units";
 import { usersQueries } from "services/users/users";
 import { workOrdersQueries } from "services/workOrders/workOrders";
+
+import { configureStore } from "@reduxjs/toolkit";
+
+import { userReducer } from "./slice/userSlice";
 import { workOrdersReducer } from "./slice/workOrdersSlice";
 
 const persistConfig = {

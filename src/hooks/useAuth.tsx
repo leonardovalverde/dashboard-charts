@@ -1,9 +1,11 @@
 import { useCallback, useState } from "react";
 import { useDispatch } from "react-redux/es/exports";
 import { useNavigate } from "react-router-dom";
-import { setUser } from "../store/slice/userSlice";
-import { IUseAuth } from "./types";
 import { useGetAllUsersQuery } from "services/users/users";
+
+import { setUser } from "../store/slice/userSlice";
+
+import { type IUseAuth } from "./types";
 
 const useAuth = (): IUseAuth => {
   const navigate = useNavigate();
@@ -13,10 +15,10 @@ const useAuth = (): IUseAuth => {
 
   const signIn = useCallback(
     async (email: string) => {
-      if (data) {
+      if (data != null) {
         setError("");
         const user = data.find((user) => user.email === email);
-        if (user) {
+        if (user != null) {
           setError("");
           dispatch(
             setUser({

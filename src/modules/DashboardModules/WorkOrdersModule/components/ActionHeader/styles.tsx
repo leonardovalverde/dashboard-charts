@@ -1,7 +1,8 @@
+import { Form } from "antd";
 import styled from "styled-components";
 import { spacings } from "ui-tokens/spacings";
+
 import { blue } from "@ant-design/colors";
-import { Form } from "antd";
 
 const AdminContainer = styled.div`
   display: flex;
@@ -27,4 +28,4 @@ const ButtonsWrapper = styled.div`
   gap: ${spacings.x4}px;
 `;
 
-export { AdminContainer, StyledFormItem, TaskWrapper, ButtonsWrapper };
+export { AdminContainer, ButtonsWrapper, StyledFormItem, TaskWrapper };

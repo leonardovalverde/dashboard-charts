@@ -1,6 +1,8 @@
-import { endpoints } from "../endpoints";
-import { IWorkOrder } from "./types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+import { endpoints } from "../endpoints";
+
+import { type IWorkOrder } from "./types";
 
 export const workOrdersQueries = createApi({
   reducerPath: "workOrdersQueries",

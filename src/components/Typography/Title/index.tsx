@@ -1,5 +1,6 @@
 import { StyledTitle } from "../styles";
-import { StyledTitleProps } from "./types";
+
+import { type StyledTitleProps } from "./types";
 
 const Title = ({ children, color, ...rest }: StyledTitleProps): JSX.Element => {
   return (

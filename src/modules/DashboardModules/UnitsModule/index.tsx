@@ -1,12 +1,14 @@
-import { useGetAllUnitsQuery } from "services/units/units";
-import { ColumnsType } from "antd/es/table";
-import { Container, LoadingWrapper } from "./styles";
-import SortingTable from "components/Table/SortingTable/SortingTable";
 import { Spin } from "antd";
+import { type ColumnsType } from "antd/es/table";
+import SortingTable from "components/Table/SortingTable/SortingTable";
+import { useGetAllUnitsQuery } from "services/units/units";
+
 import { blue } from '@ant-design/colors';
 
+import { Container, LoadingWrapper } from "./styles";
+
 const UnitsModule = (): JSX.Element => {
-  const { data, isLoading, error } = useGetAllUnitsQuery();
+  const { data, isLoading } = useGetAllUnitsQuery();
 
   const columns: ColumnsType<any> = [
     {
@@ -30,7 +32,7 @@ const UnitsModule = (): JSX.Element => {
         id: unit.id,
         name: unit.name,
       };
-    }) || [];
+    }) ?? [];
 
   return (
     <>

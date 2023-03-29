@@ -1,6 +1,6 @@
 const attentionStatus = ["inAlert", "unplanedStop", "planedStop", "inDowntime"];
 
-const StatusTranslate: { [key: string]: string } = {
+const StatusTranslate: Record<string, string> = {
   "": "Sem status",
   inOperation: "Em operação",
   inAlert: "Em alerta",

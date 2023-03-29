@@ -1,5 +1,6 @@
 import { StyledParagraph } from "../styles";
-import { StyledParagraphProps } from "./types";
+
+import { type StyledParagraphProps } from "./types";
 
 const Paragraph = ({
   children,

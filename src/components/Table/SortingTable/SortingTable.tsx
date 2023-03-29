@@ -1,5 +1,5 @@
 import { StyledTable } from "./styles";
-import { SortingTableProps } from "./types";
+import { type SortingTableProps } from "./types";
 
 const SortingTable = ({
   columns,

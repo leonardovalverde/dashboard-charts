@@ -1,5 +1,6 @@
+import { type IWorkOrder } from "services/workOrders/types";
+
 import { createSlice } from "@reduxjs/toolkit";
-import { IWorkOrder } from "../../services/workOrders/types";
 
 export interface IWorkOrderState {
   workOrders: IWorkOrder[];

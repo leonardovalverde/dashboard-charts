@@ -1,32 +1,37 @@
+import { useEffect,useState } from "react";
+import { Button, Spin, Tag } from "antd";
+import { type ColumnsType } from "antd/es/table";
+import SortingTable from "components/Table/SortingTable/SortingTable";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux/es/exports";
+import { type IWorkOrder } from "services/workOrders/types";
 import {
   useDeleteWorkOrderByIdMutation,
   useGetAllWorkOrdersQuery,
 } from "services/workOrders/workOrders";
-import { WorkOrdersModuleProps } from "./types";
-import { IWorkOrder } from "services/workOrders/types";
-import { useState, useEffect } from "react";
+import {
+  type IWorkOrderState,
+  setWorkOrders,
+} from "store/slice/workOrdersSlice";
+
+import { blue } from "@ant-design/colors";
+
+import { translatedPriority, translatedStatus } from "../constants";
 import {
   getColorByPriority,
   getColorByProgress,
   getWorkOrdersByAssignedUserId,
 } from "../utils/functions";
-import { ColumnsType } from "antd/es/table";
-import SortingTable from "components/Table/SortingTable/SortingTable";
-import { Container, LoadingWrapper } from "./styles";
-import { blue } from "@ant-design/colors";
-import { translatedPriority, translatedStatus } from "../constants";
-import { Button, Spin, Tag } from "antd";
-import WorkOrderDetails from "./components/WorkOrderDetails/WorkOrderDetails";
+
 import ActionHeader from "./components/ActionHeader/ActionHeader";
-import { useDispatch } from "react-redux/es/exports";
-import { IWorkOrderState, setWorkOrders } from "store/slice/workOrdersSlice";
-import { useSelector } from "react-redux";
+import WorkOrderDetails from "./components/WorkOrderDetails/WorkOrderDetails";
+import { Container, LoadingWrapper } from "./styles";
+import { type WorkOrdersModuleProps } from "./types";
 
 const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
   const [tableData, setTableData] = useState<IWorkOrder[]>([]);
-  const [updatePost, { isLoading: isUpdating }] =
-    useDeleteWorkOrderByIdMutation();
-  const { data, isLoading, error } = useGetAllWorkOrdersQuery();
+  const [updatePost] = useDeleteWorkOrderByIdMutation();
+  const { data, isLoading } = useGetAllWorkOrdersQuery();
   const workOrdersState = useSelector(
     (state: IWorkOrderState) => state.workOrders
   );
@@ -44,8 +49,8 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
     }
   }, [data, userData.id, userData.isAdmin, workOrdersState]);
 
-  const handleDelete = (id: string) => {
-    updatePost(id).unwrap();
+  const handleDelete = (id: string): void => {
+    void updatePost(id).unwrap();
     setTableData((prev) => prev.filter((item) => item.id !== parseInt(id)));
   };
 
@@ -94,7 +99,13 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
       dataIndex: "actions",
       className: userData.isAdmin ? "" : "hidden",
       render: (_, record: { id: string }) => (
-        <Button type="primary" danger onClick={() => handleDelete(record.id)}>
+        <Button
+          type="primary"
+          danger
+          onClick={() => {
+            handleDelete(record.id);
+          }}
+        >
           Deletar
         </Button>
       ),

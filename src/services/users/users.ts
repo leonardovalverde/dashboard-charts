@@ -1,6 +1,8 @@
-import { endpoints } from "../endpoints";
-import { IUser } from "./types";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+
+import { endpoints } from "../endpoints";
+
+import { type IUser } from "./types";
 
 export const usersQueries = createApi({
   reducerPath: "usersQueries",

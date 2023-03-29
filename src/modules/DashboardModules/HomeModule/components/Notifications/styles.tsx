@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { blue } from "@ant-design/colors";
 import { spacings } from "ui-tokens/spacings";
+
+import { blue } from "@ant-design/colors";
 
 const Container = styled.div`
   display: flex;
