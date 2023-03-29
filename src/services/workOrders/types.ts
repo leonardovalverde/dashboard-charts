@@ -1,14 +1,12 @@
 export interface IChecklist {
-  [index: number]: {
-    completed: boolean;
-    task: string;
-  };
+  completed: boolean;
+  task: string;
 }
 
 export interface IWorkOrder {
   assetId: number;
   assignedUserIds: number[];
-  checklist: IChecklist;
+  checklist: IChecklist[];
   description: string;
   id: number;
   priority: string;

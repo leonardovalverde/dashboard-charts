@@ -1,13 +1,42 @@
-import axios from "axios";
 import { endpoints } from "../endpoints";
 import { IWorkOrder } from "./types";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const getWorkOrders = async (): Promise<IWorkOrder[]> => {
-  const response = await axios.get(endpoints.workOrders.getAll);
-  return response.data;
-};
+export const workOrdersQueries = createApi({
+  reducerPath: "workOrdersQueries",
+  baseQuery: fetchBaseQuery({ baseUrl: process.env.REACT_APP_API_BASE_URL }),
+  endpoints: (builder) => ({
+    getAllWorkOrders: builder.query<IWorkOrder[], void>({
+      query: () => endpoints.workOrders.getAll,
+    }),
+    getWorkOrderById: builder.query<IWorkOrder, string>({
+      query: (id: string) => endpoints.workOrders.getById(id),
+    }),
+    updateWorkOrderChecklistById: builder.mutation<
+      IWorkOrder,
+      { id: string; checklist: IWorkOrder["checklist"] }
+    >({
+      query: ({ id, checklist }) => ({
+        url: endpoints.workOrders.getById(id),
+        method: "PATCH",
+        body: { checklist },
+      }),
+      transformResponse: (response: { data: IWorkOrder }) => response.data,
+      transformErrorResponse: (response: { status: string | number }) =>
+        response.status,
+    }),
+    deleteWorkOrderById: builder.mutation<IWorkOrder, string>({
+      query: (id: string) => ({
+        url: endpoints.workOrders.getById(id),
+        method: "DELETE",
+      }),
+    }),
+  }),
+});
 
-export const getWorkOrderById = async (id: string): Promise<IWorkOrder> => {
-  const response = await axios.get(endpoints.workOrders.getById(id));
-  return response.data;
-};
+export const {
+  useGetAllWorkOrdersQuery,
+  useGetWorkOrderByIdQuery,
+  useUpdateWorkOrderChecklistByIdMutation,
+  useDeleteWorkOrderByIdMutation,
+} = workOrdersQueries;
