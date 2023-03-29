@@ -1,9 +1,9 @@
 import HomeModule from "./HomeModule/index";
 import AssetsModule from "./AssetsModule/index";
-import CompaniesModule from "./CompaniesModule/index";
 import UnitsModule from "./UnitsModule/index";
 import UsersModule from "./UsersModule/index";
 import { IUser } from "services/users/types";
+import WorkOrdersModule from "./WorkOrdersModule/index";
 interface IModules {
   [key: string]: JSX.Element;
 }
@@ -11,11 +11,22 @@ interface IModules {
 const modules = (userData: IUser): IModules => {
   return {
     home: <HomeModule userData={userData} />,
-    assets: <AssetsModule />,
-    companies: <CompaniesModule />,
+    assets: <AssetsModule userData={userData} />,
     units: <UnitsModule />,
-    users: <UsersModule />,
+    users: <UsersModule userData={userData} />,
+    workOrders: <WorkOrdersModule userData={userData} />,
   };
 };
 
-export { modules };
+const translatedPriority: { [key: string]: string } = {
+  high: "Alta",
+  medium: "Média",
+  low: "Baixa",
+};
+
+const translatedStatus: { [key: string]: string } = {
+  completed: "Concluída",
+  "in progress": "Em andamento",
+};
+
+export { modules, translatedPriority, translatedStatus };
