@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { Spin, Tag } from "antd";
+import { Button, Spin, Tag } from "antd";
 import { type ColumnsType } from "antd/es/table";
 import SortingTable from "components/Table/SortingTable/SortingTable";
 import { getColorByStatus } from "modules/DashboardModules/utils/functions";
-import { useGetAllAssetsQuery } from "services/assets/assets";
+import {
+  useDeleteAssetByIdMutation,
+  useGetAllAssetsQuery,
+} from "services/assets/assets";
 import { type IAsset } from "services/assets/types";
 
 import { blue } from "@ant-design/colors";
@@ -11,13 +14,14 @@ import { blue } from "@ant-design/colors";
 import { StatusTranslate } from "../HomeModule/constants";
 import { getColorByScore, getOnlyAsignedAssets } from "../utils/functions";
 
+import ActionHeader from "./components/ActionHeader/ActionHeader";
 import AssetDetails from "./components/AssetDetails/AssetDetails";
 import { Container, LoadingWrapper } from "./styles";
 import { type AssetsModuleProps } from "./types";
 
 const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
   const [assets, setAssets] = useState<IAsset[]>([]);
-
+  const [updatePost] = useDeleteAssetByIdMutation();
   const { data, isLoading } = useGetAllAssetsQuery();
 
   useEffect(() => {
@@ -27,6 +31,11 @@ const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
       setAssets(getOnlyAsignedAssets(data, userData.id));
     }
   }, [data, userData.id, userData.isAdmin]);
+
+  const handleDelete = (id: string): void => {
+    void updatePost(id).unwrap();
+    setAssets((prev) => prev.filter((item) => item.id !== parseInt(id)));
+  };
 
   const columns: ColumnsType<any> = [
     {
@@ -80,6 +89,22 @@ const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
       sorter: (a, b) =>
         a.sensors.toString().localeCompare(b.sensors.toString()),
     },
+    {
+      title: "Ações",
+      dataIndex: "actions",
+      className: userData.isAdmin ? "" : "hidden",
+      render: (_, record: { id: string }) => (
+        <Button
+          type="primary"
+          danger
+          onClick={() => {
+            handleDelete(record.id);
+          }}
+        >
+          Deletar
+        </Button>
+      ),
+    },
   ];
 
   const assetsData = assets.map((asset) => ({
@@ -99,18 +124,24 @@ const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
           <Spin />
         </LoadingWrapper>
       ) : (
-        <SortingTable
-          columns={columns}
-          pagination={{
-            pageSize: 20,
-            position: ["topCenter"],
-            style: { backgroundColor: blue[0], margin: 0, padding: "10px 0" },
-          }}
-          data={assetsData}
-          expandable={{
-            expandedRowRender: (record) => <AssetDetails assetId={record.id} />,
-          }}
-        />
+        <>
+          {userData.isAdmin && <ActionHeader userData={userData} />}
+          <SortingTable
+            columns={columns}
+            pagination={{
+              pageSize: 20,
+              position: ["bottomCenter"],
+              style: { backgroundColor: blue[0], margin: 0, padding: "10px 0" },
+              hideOnSinglePage: true,
+            }}
+            data={assetsData}
+            expandable={{
+              expandedRowRender: (record) => (
+                <AssetDetails assetId={record.id} />
+              ),
+            }}
+          />
+        </>
       )}
     </Container>
   );
