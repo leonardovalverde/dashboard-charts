@@ -1,5 +1,6 @@
 import { Divider, Menu, Typography } from "antd";
 import styled from "styled-components";
+import { breakpoints } from "ui-tokens/breakpoints";
 import { spacings } from "ui-tokens/spacings";
 
 import { blue } from "@ant-design/colors";
@@ -14,12 +15,33 @@ const Container = styled.header`
   background-color: ${blue.primary};
   color: #fff;
   min-height: 60px;
+
+  @media (max-width: ${breakpoints.tablet}px) {
+    padding: ${spacings.x1}px ${spacings.x3}px;
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+  }
 `;
 
 const HeaderLeftSection = styled.div`
   display: flex;
   width: 50%;
   justify-content: flex-start;
+  align-items: center;
+
+  @media (max-width: ${breakpoints.tablet}px) {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  button {
+    display: none;
+    @media (max-width: ${breakpoints.tablet}px) {
+      display: block;
+    }
+  }
 `;
 
 const HeaderRightSection = styled.div`
@@ -27,6 +49,10 @@ const HeaderRightSection = styled.div`
   width: 100%;
   justify-content: flex-end;
   align-items: center;
+
+  @media (max-width: ${breakpoints.tablet}px) {
+    display: none;
+  }
 `;
 
 const StyledDivider = styled(Divider)`

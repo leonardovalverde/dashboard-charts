@@ -1,7 +1,14 @@
-import { Dropdown, Image, type MenuProps } from "antd";
+import { useState } from "react";
+import { Button, Dropdown, Image, type MenuProps } from "antd";
 import useAuth from "hooks/useAuth";
 
-import { DownOutlined } from "@ant-design/icons";
+import {
+  DownOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+} from "@ant-design/icons";
+
+import DashboardMobileMenu from "../DashboardMobileMenu/DashboardMobileMenu";
 
 import {
   Container,
@@ -20,8 +27,24 @@ const logout: MenuProps["items"] = [
   },
 ];
 
-const DashboardHeader = ({ userData }: DashboardHeaderProps): JSX.Element => {
+const DashboardHeader = ({
+  userData,
+  current,
+  onClick,
+}: DashboardHeaderProps): JSX.Element => {
   const { signOut } = useAuth();
+  const [collapsed, setCollapsed] = useState<boolean>(true);
+
+  const toggleCollapsed = (): void => {
+    setCollapsed(!collapsed);
+  };
+
+  const handleCollapsed: MenuProps["onClick"] = (active) => {
+    if (onClick) {
+      onClick(active);
+      setCollapsed(!collapsed);
+    }
+  };
 
   return (
     <Container>
@@ -32,6 +55,17 @@ const DashboardHeader = ({ userData }: DashboardHeaderProps): JSX.Element => {
           preview={false}
           alt="Logo da empresa"
         />
+        <Button
+          type="primary"
+          onClick={toggleCollapsed}
+          style={{ paddingBottom: 0 }}
+        >
+          {collapsed ? (
+            <MenuUnfoldOutlined style={{ fontSize: "18px" }} />
+          ) : (
+            <MenuFoldOutlined style={{ fontSize: "18px" }} />
+          )}
+        </Button>
       </HeaderLeftSection>
       <HeaderRightSection>
         <Dropdown
@@ -52,6 +86,12 @@ const DashboardHeader = ({ userData }: DashboardHeaderProps): JSX.Element => {
           </DropDownWrapper>
         </Dropdown>
       </HeaderRightSection>
+      <DashboardMobileMenu
+        current={current}
+        onClick={handleCollapsed}
+        colapsed={collapsed}
+        userData={userData}
+      />
     </Container>
   );
 };
