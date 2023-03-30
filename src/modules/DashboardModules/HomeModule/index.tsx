@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
+import Highcharts from 'highcharts';
+import highchartsAccessibility from "highcharts/modules/accessibility";
 import { useGetAllAssetsQuery } from "services/assets/assets";
 import { type IAsset } from "services/assets/types";
 
@@ -31,6 +33,10 @@ const HomeModule = ({ userData }: HomeModuleProps): JSX.Element => {
       setAssets(getOnlyAsignedAssets(data, userData.id));
     }
   }, [data, userData.id, userData.isAdmin]);
+
+  useEffect(() => {
+    highchartsAccessibility(Highcharts);
+  }, []);
 
   return (
     <>
