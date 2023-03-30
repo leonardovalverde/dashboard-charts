@@ -115,7 +115,7 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
   const workOrdersData =
     tableData.map((workOrder) => {
       return {
-        key: workOrder.assetId,
+        key: workOrder.id,
         id: workOrder.id,
         name: workOrder.title,
         priority: workOrder.priority,
