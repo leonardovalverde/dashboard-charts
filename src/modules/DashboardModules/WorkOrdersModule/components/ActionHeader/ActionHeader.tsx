@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { Button, Form, Input, Modal, Select, Tooltip } from "antd";
-import { AdminContainer, ButtonsWrapper, ItemWrapper, StyledFormItem } from "modules/DashboardModules/styles";
+import {
+  AdminContainer,
+  ButtonsWrapper,
+  ItemWrapper,
+  StyledFormItem,
+} from "modules/DashboardModules/styles";
 import { createTaskWithStatus } from "modules/DashboardModules/utils/functions";
 import { useCreateWorkOrderMutation } from "services/workOrders/workOrders";
 import { spacings } from "ui-tokens/spacings";
@@ -12,7 +17,10 @@ import { type IFormValues } from "./types";
 const ActionHeader = (): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const [updatePost] = useCreateWorkOrderMutation();
+  const [
+    updateWorkOrder,
+    { isLoading: updateWorkOrderLoading, isError: updateWorkOrderIsError },
+  ] = useCreateWorkOrderMutation();
   const [form] = Form.useForm();
 
   const toggleModal = (): void => {
@@ -20,7 +28,7 @@ const ActionHeader = (): JSX.Element => {
   };
 
   const handleCreateWorkOrder = (values: IFormValues): void => {
-    void updatePost({
+    void updateWorkOrder({
       title: values.name,
       description: values.description,
       priority: values.priority,
@@ -28,7 +36,14 @@ const ActionHeader = (): JSX.Element => {
       checklist: createTaskWithStatus(values.tasks),
       assetId: values.assetId,
       assignedUserIds: [],
-    }).unwrap();
+    })
+      .unwrap()
+      .then(() => {
+        if (!updateWorkOrderIsError) {
+          form.resetFields();
+          toggleModal();
+        }
+      });
   };
 
   return (
@@ -154,7 +169,11 @@ const ActionHeader = (): JSX.Element => {
           <ButtonsWrapper>
             <Button onClick={toggleModal}>Cancelar</Button>
             <Tooltip title="A request é enviada mas não reflete na tabela, como a fake api não reflete mudanças entre as chamadas poderia ocasionar bugs ao clicar para ver mais detalhes da tarefa">
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                disabled={updateWorkOrderLoading}
+              >
                 Criar
               </Button>
             </Tooltip>

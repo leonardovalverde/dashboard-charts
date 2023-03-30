@@ -10,11 +10,13 @@ import { StatusTranslate } from "../HomeModule/constants";
 interface IAssetsColumns {
   isAdmin: boolean;
   handleDelete: (id: string) => void;
+  isLoading: boolean;
 }
 
 const assetsColumns = ({
   isAdmin,
   handleDelete,
+  isLoading,
 }: IAssetsColumns): ColumnsType<any> => [
   {
     title: "id",
@@ -74,6 +76,7 @@ const assetsColumns = ({
       <Button
         type="primary"
         danger
+        disabled={isLoading}
         onClick={() => {
           handleDelete(record.id);
         }}

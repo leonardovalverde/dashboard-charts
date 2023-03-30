@@ -1,17 +1,30 @@
 import { useEffect, useState } from "react";
-import { Button, Form, Input, Modal, Select, Tooltip } from "antd";
-import { AdminContainer, ButtonsWrapper } from "modules/DashboardModules/styles";
+import { Button, Form, Input, Modal, Select, Spin, Tooltip } from "antd";
+import Text from "components/Typography/Text";
+import {
+  AdminContainer,
+  ButtonsWrapper,
+} from "modules/DashboardModules/styles";
 import { type IUnit } from "services/units/types";
 import { useGetAllUnitsQuery } from "services/units/units";
 import { useCreateUserMutation } from "services/users/users";
+
+import { red } from "@ant-design/colors";
 
 import { type ActionHeaderProps, type IFormValues } from "./types";
 
 const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
   const [units, setUnits] = useState<IUnit[]>([]);
-  const { data: unitData } = useGetAllUnitsQuery();
-  const [updatePost] = useCreateUserMutation();
+  const {
+    data: unitData,
+    isLoading: unitIsLoading,
+    isError: unitsIsError,
+  } = useGetAllUnitsQuery();
+  const [
+    updateUsers,
+    { isLoading: updateUsersLoading, isError: updateUsersIsError },
+  ] = useCreateUserMutation();
   const [form] = Form.useForm();
 
   const toggleModal = (): void => {
@@ -19,14 +32,19 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
   };
 
   const handleCreateWorkOrder = (values: IFormValues): void => {
-    void updatePost({
+    void updateUsers({
       name: values.name,
       email: values.email,
       unitId: values.unitId,
       companyId: userData.companyId,
-    }).unwrap();
-    toggleModal();
-    form.resetFields();
+    })
+      .unwrap()
+      .then(() => {
+        if (!updateUsersIsError) {
+          toggleModal();
+          form.resetFields();
+        }
+      });
   };
 
   useEffect(() => {
@@ -75,6 +93,7 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
           <Form.Item
             label="Unidade pertencente"
             name="unitId"
+            help={unitsIsError ? "Erro ao carregar unidades" : null}
             rules={[
               {
                 required: true,
@@ -82,18 +101,29 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
               },
             ]}
           >
-            <Select placeholder="Selecione a unidade pertencente">
-              {units.map((unit) => (
-                <Select.Option key={unit.id} value={unit.id}>
-                  {unit.name}
-                </Select.Option>
-              ))}
-            </Select>
+            {unitIsLoading ? (
+              <Spin />
+            ) : (
+              <Select placeholder="Selecione a unidade pertencente">
+                {units.map((unit) => (
+                  <Select.Option key={unit.id} value={unit.id}>
+                    {unit.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
           </Form.Item>
+          {updateUsersIsError && (
+            <Text color={red[6]}> Não foi possível criar o novo usuário </Text>
+          )}
           <ButtonsWrapper>
             <Button onClick={toggleModal}>Cancelar</Button>
             <Tooltip title="A request é enviada mas não reflete na tabela, pois informações como ID normalmente são gerados pelo back-end">
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                disabled={updateUsersLoading}
+              >
                 Criar
               </Button>
             </Tooltip>

@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import SortingTable from "components/Table/SortingTable/SortingTable";
+import Text from "components/Typography/Text";
 import { type IUnit } from "services/units/types";
 import {
   useDeleteUnityByIdMutation,
   useGetAllUnitsQuery,
 } from "services/units/units";
 
-import { blue } from "@ant-design/colors";
+import { blue, red } from "@ant-design/colors";
 
 import { LoadingWrapper } from "../styles";
 
@@ -18,15 +19,27 @@ import { type UnitsModuleProps } from "./type";
 
 const UnitsModule = ({ userData }: UnitsModuleProps): JSX.Element => {
   const [units, setUnits] = useState<IUnit[]>([]);
-  const [updatePost] = useDeleteUnityByIdMutation();
-  const { data, isLoading } = useGetAllUnitsQuery();
+  const [
+    updateUnits,
+    { isLoading: updateUnitsLoading, isError: updateUnitsError },
+  ] = useDeleteUnityByIdMutation();
+  const {
+    data: unitsData,
+    isLoading: unitsIsLoading,
+    isError: unitsIsError,
+  } = useGetAllUnitsQuery();
 
   const handleDelete = (key: string): void => {
-    void updatePost(key).unwrap();
-    setUnits((prev) => prev.filter((item) => item.id !== parseInt(key)));
+    void updateUnits(key)
+      .unwrap()
+      .then(() => {
+        if (!updateUnitsError) {
+          setUnits((prev) => prev.filter((item) => item.id !== parseInt(key)));
+        }
+      });
   };
 
-  const unitsData =
+  const unitsTableData =
     units?.map((unit) => {
       return {
         key: unit.id,
@@ -36,14 +49,14 @@ const UnitsModule = ({ userData }: UnitsModuleProps): JSX.Element => {
     }) ?? [];
 
   useEffect(() => {
-    if (data) {
-      setUnits(data);
+    if (unitsData) {
+      setUnits(unitsData);
     }
-  }, [data]);
+  }, [unitsData]);
 
   return (
     <>
-      {isLoading ? (
+      {unitsIsLoading ? (
         <LoadingWrapper>
           <Spin />
         </LoadingWrapper>
@@ -51,10 +64,11 @@ const UnitsModule = ({ userData }: UnitsModuleProps): JSX.Element => {
         <Container>
           {userData.isAdmin && <ActionHeader userData={userData} />}
           <SortingTable
-            data={unitsData}
+            data={unitsTableData}
             columns={unitsColumns({
               isAdmin: !!userData.isAdmin,
               handleDelete,
+              isLoading: updateUnitsLoading,
             })}
             pagination={{
               pageSize: 20,
@@ -63,6 +77,9 @@ const UnitsModule = ({ userData }: UnitsModuleProps): JSX.Element => {
               hideOnSinglePage: true,
             }}
           />
+          {unitsIsError && (
+            <Text color={red[6]}>Não foi possível carregar os dados</Text>
+          )}
         </Container>
       )}
     </>

@@ -1,5 +1,15 @@
 import { useEffect, useState } from "react";
-import { Button, Form, Input, InputNumber, Modal, Select, Tooltip } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Modal,
+  Select,
+  Spin,
+  Tooltip,
+} from "antd";
+import Text from "components/Typography/Text";
 import {
   AdminContainer,
   ButtonsWrapper,
@@ -12,6 +22,7 @@ import { useGetAllUnitsQuery } from "services/units/units";
 import { type IUser } from "services/users/types";
 import { useGetAllUsersQuery } from "services/users/users";
 
+import { red } from "@ant-design/colors";
 import { MinusCircleOutlined } from "@ant-design/icons";
 
 import { type ActionHeaderProps, type IFormValues } from "./types";
@@ -20,9 +31,20 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
   const [users, setUsers] = useState<IUser[]>([]);
   const [units, setUnits] = useState<IUnit[]>([]);
-  const { data } = useGetAllUsersQuery();
-  const { data: unitData } = useGetAllUnitsQuery();
-  const [updatePost] = useCreateAssetMutation();
+  const {
+    data: usersData,
+    isLoading: usersIsLoading,
+    isError: usersIsError,
+  } = useGetAllUsersQuery();
+  const {
+    data: unitData,
+    isLoading: unitIsLoading,
+    isError: unitsIsError,
+  } = useGetAllUnitsQuery();
+  const [
+    updateAssets,
+    { isLoading: updateAssetsLoading, isError: updateIsError },
+  ] = useCreateAssetMutation();
   const [form] = Form.useForm();
 
   const toggleModal = (): void => {
@@ -30,7 +52,7 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
   };
 
   const handleCreateWorkOrder = (values: IFormValues): void => {
-    void updatePost({
+    void updateAssets({
       assignedUserIds: values.assignedIds.map((id) => parseInt(id)),
       companyId: userData.companyId,
       healthHistory: [],
@@ -51,14 +73,21 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
       },
       status: values.status,
       unitId: values.unitId,
-    }).unwrap();
+    })
+      .unwrap()
+      .then(() => {
+        if (!updateIsError) {
+          toggleModal();
+          form.resetFields();
+        }
+      });
   };
 
   useEffect(() => {
-    if (data) {
-      setUsers(data);
+    if (usersData) {
+      setUsers(usersData);
     }
-  }, [data]);
+  }, [usersData]);
 
   useEffect(() => {
     if (unitData) {
@@ -103,6 +132,7 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
           <Form.Item
             label="Atribuir responsáveis"
             name="assignedIds"
+            help={usersIsError ? "Erro ao carregar usuários" : ""}
             rules={[
               {
                 required: true,
@@ -110,21 +140,26 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
               },
             ]}
           >
-            <Select
-              mode="multiple"
-              allowClear
-              placeholder="Selecione os responsáveis"
-            >
-              {users.map((user) => (
-                <Select.Option key={user.id} value={user.id}>
-                  {user.name}
-                </Select.Option>
-              ))}
-            </Select>
+            {usersIsLoading ? (
+              <Spin />
+            ) : (
+              <Select
+                mode="multiple"
+                allowClear
+                placeholder="Selecione os responsáveis"
+              >
+                {users.map((user) => (
+                  <Select.Option key={user.id} value={user.id}>
+                    {user.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
           </Form.Item>
           <Form.Item
             label="Unidade pertencente"
             name="unitId"
+            help={unitsIsError ? "Erro ao carregar unidades" : ""}
             rules={[
               {
                 required: true,
@@ -132,13 +167,17 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
               },
             ]}
           >
-            <Select placeholder="Selecione a unidade pertencente">
-              {units.map((unit) => (
-                <Select.Option key={unit.id} value={unit.id}>
-                  {unit.name}
-                </Select.Option>
-              ))}
-            </Select>
+            {unitIsLoading ? (
+              <Spin />
+            ) : (
+              <Select placeholder="Selecione a unidade pertencente">
+                {units.map((unit) => (
+                  <Select.Option key={unit.id} value={unit.id}>
+                    {unit.name}
+                  </Select.Option>
+                ))}
+              </Select>
+            )}
           </Form.Item>
           <Form.Item
             label="Temperatura máxima"
@@ -242,10 +281,17 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
               </>
             )}
           </Form.List>
+          {updateIsError && (
+            <Text color={red[6]}> Não foi possível criar um novo ativo </Text>
+          )}
           <ButtonsWrapper>
             <Button onClick={toggleModal}>Cancelar</Button>
             <Tooltip title="A request é enviada mas não reflete na tabela, como a fake api não reflete mudanças entre as chamadas poderia ocasionar bugs ao clicar para ver mais detalhes">
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                disabled={updateAssetsLoading}
+              >
                 Criar
               </Button>
             </Tooltip>

@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge, Descriptions, Image, Progress, Spin, Tag } from "antd";
 import Text from "components/Typography/Text";
 import { format } from "date-fns";
@@ -10,92 +10,111 @@ import { type IAsset } from "services/assets/types";
 import { useGetCompanyByIdQuery } from "services/companies/companies";
 import { useGetUnitByIdQuery } from "services/units/units";
 
+import { red } from "@ant-design/colors";
+
 import { ProgressWrapper } from "./styles";
 import { type AssetDetailsProps } from "./types";
 
 const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
-  const { data, isLoading } = useGetAssetsByIdQuery(assetId);
+  const {
+    data: assetsData,
+    isLoading: assetsLoading,
+    isError: assetsIsError,
+  } = useGetAssetsByIdQuery(assetId);
   const [assetData, setAssetData] = useState<IAsset>({} as IAsset);
-  const { data: unitData, isLoading: unitIsLoading } = useGetUnitByIdQuery(
-    assetData.unitId
-  );
-  const { data: companyData, isLoading: companyIsLoading } =
-    useGetCompanyByIdQuery(assetData.companyId);
+  const {
+    data: unitData,
+    isLoading: unitIsLoading,
+    isError: unitIsError,
+  } = useGetUnitByIdQuery(assetData.unitId);
+  const {
+    data: companyData,
+    isLoading: companyIsLoading,
+    isError: companyIsError,
+  } = useGetCompanyByIdQuery(assetData.companyId);
 
   useEffect(() => {
-    if (data) {
-      setAssetData(data);
+    if (assetsData) {
+      setAssetData(assetsData);
     }
-  }, [data]);
+  }, [assetsData]);
 
   return (
     <>
-      {isLoading ? (
+      {assetsLoading ? (
         <LoadingWrapper>
           <Spin />
         </LoadingWrapper>
       ) : (
-        <Descriptions title={data?.name} bordered>
+        <Descriptions title={assetData.name} bordered>
+          {assetsIsError && (
+            <Text color={red[6]}>Erro ao carregar os dados do ativo</Text>
+          )}
           <Descriptions.Item label="Empresa:">
-            {companyIsLoading ? <Spin /> : companyData?.name}
+            {companyIsLoading ? <Spin /> : companyData?.name}{" "}
+            {companyIsError && (
+              <Tag color="error">Não foi possível carregar</Tag>
+            )}
           </Descriptions.Item>
           <Descriptions.Item span={3} label="Unidade:">
-            {unitIsLoading ? <Spin /> : unitData?.name}
+            {unitIsLoading ? <Spin /> : unitData?.name}{" "}
+            {unitIsError && <Tag color="error">Não foi possível carregar</Tag>}
           </Descriptions.Item>
           <Descriptions.Item span={3} label="Especificações:">
-            Temperatura Máxima: {data?.specifications.maxTemp}°C
+            Temperatura Máxima: {assetData.specifications.maxTemp}°C
             <br />
-            {data?.specifications.rpm && (
-              <>RPM (Rotações por minuto): {data?.specifications.rpm}</>
+            {assetData.specifications.rpm && (
+              <>RPM (Rotações por minuto): {assetData.specifications.rpm}</>
             )}
             <br />
-            {data?.specifications.power && (
-              <>Potência: {data?.specifications.power}W</>
+            {assetData.specifications.power && (
+              <>Potência: {assetData.specifications.power}W</>
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Métricas:">
-            Total de coletas: {data?.metrics.totalCollectsUptime}
+            Total de coletas: {assetData.metrics.totalCollectsUptime}
             <br />
             Horas em funcionamento:{" "}
-            {data?.metrics.totalUptime && Math.round(data?.metrics.totalUptime)}
+            {assetData.metrics.totalUptime &&
+              Math.round(assetData.metrics.totalUptime)}
             <br />
             Momento da última coleta:{" "}
-            {data?.metrics.lastUptimeAt &&
+            {assetData.metrics.lastUptimeAt &&
               format(
-                new Date(data?.metrics.lastUptimeAt),
+                new Date(assetData.metrics.lastUptimeAt),
                 "dd/MM/yyyy HH:mm:ss"
               )}
           </Descriptions.Item>
           <Descriptions.Item label="Sensores:" span={2}>
-            {data?.sensors.map((sensor) => (
+            {assetData.sensors.map((sensor) => (
               <Tag color="blue" key={sensor}>
                 {sensor}
               </Tag>
             ))}
           </Descriptions.Item>
           <Descriptions.Item label="Saúde:">
-            {data?.healthscore && (
+            {assetData.healthscore && (
               <ProgressWrapper>
                 <Progress
-                  percent={data?.healthscore}
-                  status={data?.healthscore < 60 ? "exception" : "active"}
+                  percent={assetData.healthscore}
+                  status={assetData.healthscore < 60 ? "exception" : "active"}
                   showInfo={false}
                   style={{ width: "90%" }}
                 />
-                <Text>{data?.healthscore}%</Text>
+                <Text>{assetData.healthscore}%</Text>
               </ProgressWrapper>
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Estado:" span={3}>
-            {data?.status && (
+            {assetData.status && (
               <>
-                <Badge color={getColorByStatus(data?.status)} />{" "}
-                {StatusTranslate[data?.status]}
+                <Badge color={getColorByStatus(assetData.status)} />{" "}
+                {StatusTranslate[assetData.status]}
               </>
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Imagem (clique para ampliar):">
-            {data?.image && <Image src={data?.image} width={200} />}
+            {assetData.image && <Image src={assetData.image} width={200} />}
           </Descriptions.Item>
         </Descriptions>
       )}

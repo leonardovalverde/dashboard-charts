@@ -1,13 +1,22 @@
 import { useState } from "react";
 import { Button, Form, Input, Modal, Tooltip } from "antd";
-import { AdminContainer, ButtonsWrapper } from "modules/DashboardModules/styles";
+import Text from "components/Typography/Text";
+import {
+  AdminContainer,
+  ButtonsWrapper,
+} from "modules/DashboardModules/styles";
 import { useCreateUnitMutation } from "services/units/units";
+
+import { red } from "@ant-design/colors";
 
 import { type ActionHeaderProps, type IFormValues } from "./types";
 
 const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
   const [isOpen, setIsOpen] = useState(false);
-  const [updatePost] = useCreateUnitMutation();
+  const [
+    updateUnits,
+    { isLoading: updateUnitsLoading, isError: updateUnitsIsError },
+  ] = useCreateUnitMutation();
   const [form] = Form.useForm();
 
   const toggleModal = (): void => {
@@ -15,10 +24,17 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
   };
 
   const handleCreateWorkOrder = (values: IFormValues): void => {
-    void updatePost({
+    void updateUnits({
       name: values.name,
       companyId: userData.companyId,
-    }).unwrap();
+    })
+      .unwrap()
+      .then(() => {
+        if (!updateUnitsIsError) {
+          toggleModal();
+          form.resetFields();
+        }
+      });
     toggleModal();
     form.resetFields();
   };
@@ -48,10 +64,17 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
           >
             <Input placeholder="Nome da unidade" />
           </Form.Item>
+          {updateUnitsIsError && (
+            <Text color={red[6]}>Não foi possível criar a nova unidade</Text>
+          )}
           <ButtonsWrapper>
             <Button onClick={toggleModal}>Cancelar</Button>
             <Tooltip title="A request é enviada mas não reflete na tabela, pois informações como ID normalmente são gerados pelo back-end">
-              <Button type="primary" htmlType="submit">
+              <Button
+                type="primary"
+                htmlType="submit"
+                disabled={updateUnitsLoading}
+              >
                 Criar
               </Button>
             </Tooltip>

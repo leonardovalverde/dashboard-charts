@@ -7,11 +7,13 @@ import { getColorByPriority, getColorByProgress } from "../utils/functions";
 interface IWorkOrdersColumns {
   isAdmin: boolean;
   handleDelete: (id: string) => void;
+  isLoading: boolean;
 }
 
 const workOrdersColumns = ({
   isAdmin,
   handleDelete,
+  isLoading,
 }: IWorkOrdersColumns): ColumnsType<any> => [
   {
     title: "id",
@@ -60,6 +62,7 @@ const workOrdersColumns = ({
       <Button
         type="primary"
         danger
+        disabled={isLoading}
         onClick={() => {
           handleDelete(record.id);
         }}

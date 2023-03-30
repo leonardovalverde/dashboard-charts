@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import SortingTable from "components/Table/SortingTable/SortingTable";
+import Text from "components/Typography/Text";
 import {
   useDeleteAssetByIdMutation,
   useGetAllAssetsQuery,
 } from "services/assets/assets";
 import { type IAsset } from "services/assets/types";
 
-import { blue } from "@ant-design/colors";
+import { blue, red } from "@ant-design/colors";
 
 import { LoadingWrapper } from "../styles";
 import { getOnlyAsignedAssets } from "../utils/functions";
@@ -20,23 +21,35 @@ import { type AssetsModuleProps } from "./types";
 
 const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
   const [assets, setAssets] = useState<IAsset[]>([]);
-  const [updatePost] = useDeleteAssetByIdMutation();
-  const { data, isLoading } = useGetAllAssetsQuery();
+  const [
+    updateAssets,
+    { isError: updateAssetError, isLoading: updateAssetLoading },
+  ] = useDeleteAssetByIdMutation();
+  const {
+    data: assetsData,
+    isLoading: assetsIsLoading,
+    error: assetsError,
+  } = useGetAllAssetsQuery();
 
   useEffect(() => {
-    if (data && userData.isAdmin) {
-      setAssets(data);
-    } else if (data) {
-      setAssets(getOnlyAsignedAssets(data, userData.id));
+    if (assetsData && userData.isAdmin) {
+      setAssets(assetsData);
+    } else if (assetsData) {
+      setAssets(getOnlyAsignedAssets(assetsData, userData.id));
     }
-  }, [data, userData.id, userData.isAdmin]);
+  }, [assetsData, userData.id, userData.isAdmin]);
 
   const handleDelete = (id: string): void => {
-    void updatePost(id).unwrap();
-    setAssets((prev) => prev.filter((item) => item.id !== parseInt(id)));
+    void updateAssets(id)
+      .unwrap()
+      .then(() => {
+        if (!updateAssetError) {
+          setAssets((prev) => prev.filter((item) => item.id !== parseInt(id)));
+        }
+      });
   };
 
-  const assetsData = assets.map((asset) => ({
+  const assetsTableData = assets.map((asset) => ({
     key: asset.id,
     id: asset.id,
     name: asset.name,
@@ -48,7 +61,7 @@ const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
 
   return (
     <Container>
-      {isLoading ? (
+      {assetsIsLoading ? (
         <LoadingWrapper>
           <Spin />
         </LoadingWrapper>
@@ -59,6 +72,7 @@ const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
             columns={assetsColumns({
               isAdmin: !!userData.isAdmin,
               handleDelete,
+              isLoading: updateAssetLoading,
             })}
             pagination={{
               pageSize: 20,
@@ -66,7 +80,7 @@ const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
               style: { backgroundColor: blue[0], margin: 0, padding: "10px 0" },
               hideOnSinglePage: true,
             }}
-            data={assetsData}
+            data={assetsTableData}
             expandable={{
               expandedRowRender: (record) => (
                 <AssetDetails assetId={record.id} />
@@ -75,6 +89,7 @@ const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
           />
         </>
       )}
+      {assetsError && <Text color={red[6]}>Erro ao buscar ativos</Text>}
     </Container>
   );
 };

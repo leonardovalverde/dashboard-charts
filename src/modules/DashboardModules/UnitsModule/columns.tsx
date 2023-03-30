@@ -4,11 +4,13 @@ import { type ColumnsType } from "antd/es/table";
 interface IUnitsColumns {
   isAdmin: boolean;
   handleDelete: (id: string) => void;
+  isLoading: boolean;
 }
 
 const unitsColumns = ({
   isAdmin,
   handleDelete,
+  isLoading,
 }: IUnitsColumns): ColumnsType<any> => [
   {
     title: "id",
@@ -30,6 +32,7 @@ const unitsColumns = ({
       <Button
         type="primary"
         danger
+        disabled={isLoading}
         onClick={() => {
           handleDelete(record.key);
         }}

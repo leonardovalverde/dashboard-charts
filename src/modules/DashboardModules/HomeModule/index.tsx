@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
-import Highcharts from 'highcharts';
+import Text from "components/Typography/Text";
+import Highcharts from "highcharts";
 import highchartsAccessibility from "highcharts/modules/accessibility";
 import { useGetAllAssetsQuery } from "services/assets/assets";
 import { type IAsset } from "services/assets/types";
 
-import { blue } from "@ant-design/colors";
+import { blue, red } from "@ant-design/colors";
 
 import { getOnlyAsignedAssets } from "../utils/functions";
 
@@ -24,15 +25,19 @@ import { type HomeModuleProps } from "./types";
 const HomeModule = ({ userData }: HomeModuleProps): JSX.Element => {
   const [assets, setAssets] = useState<IAsset[]>([]);
 
-  const { data, isLoading } = useGetAllAssetsQuery();
+  const {
+    data: assetsData,
+    isLoading: assetsLoading,
+    isError: assetsIsError,
+  } = useGetAllAssetsQuery();
 
   useEffect(() => {
-    if (data && userData.isAdmin) {
-      setAssets(data);
-    } else if (data) {
-      setAssets(getOnlyAsignedAssets(data, userData.id));
+    if (assetsData && userData.isAdmin) {
+      setAssets(assetsData);
+    } else if (assetsData) {
+      setAssets(getOnlyAsignedAssets(assetsData, userData.id));
     }
-  }, [data, userData.id, userData.isAdmin]);
+  }, [assetsData, userData.id, userData.isAdmin]);
 
   useEffect(() => {
     highchartsAccessibility(Highcharts);
@@ -40,7 +45,7 @@ const HomeModule = ({ userData }: HomeModuleProps): JSX.Element => {
 
   return (
     <>
-      {isLoading ? (
+      {assetsLoading ? (
         <LoadingContainer>
           <Spin />
         </LoadingContainer>
@@ -48,14 +53,26 @@ const HomeModule = ({ userData }: HomeModuleProps): JSX.Element => {
         <Container>
           <ChartContainer>
             <ChartWrapper>
-              <HealthChart assets={assets} />
+              {assetsIsError ? (
+                <Text color={red[6]}>Não foi possível carregar os dados</Text>
+              ) : (
+                <HealthChart assets={assets} />
+              )}
             </ChartWrapper>
             <ChartWrapper backgroundColor={blue[1]}>
-              <StatusChart assets={assets} />
+              {assetsIsError ? (
+                <Text color={red[6]}>Não foi possível carregar os dados</Text>
+              ) : (
+                <StatusChart assets={assets} />
+              )}
             </ChartWrapper>
           </ChartContainer>
           <NotificationWrapper>
-            <Notifications assets={assets} />
+            {assetsIsError ? (
+              <Text color={red[6]}>Não foi possível carregar os dados</Text>
+            ) : (
+              <Notifications assets={assets} />
+            )}
           </NotificationWrapper>
         </Container>
       )}

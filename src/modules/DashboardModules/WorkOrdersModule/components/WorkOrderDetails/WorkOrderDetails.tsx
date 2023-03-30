@@ -8,6 +8,8 @@ import {
   useUpdateWorkOrderChecklistByIdMutation,
 } from "services/workOrders/workOrders";
 
+import { red } from "@ant-design/colors";
+
 import { OptionWrapper } from "./styles";
 import { type WorkOrderDetailsProps } from "./types";
 
@@ -16,9 +18,15 @@ const WorkOrderDetails = ({
   userData,
 }: WorkOrderDetailsProps): JSX.Element => {
   const [checklist, setChecklist] = useState<IChecklist[]>([]);
-  const { data } = useGetWorkOrderByIdQuery(workOrderId);
-  const [updatePost, { isLoading: isUpdating }] =
-    useUpdateWorkOrderChecklistByIdMutation();
+  const {
+    data: workOrderdata,
+    isLoading: workOrderLoading,
+    isError: workOrderError,
+  } = useGetWorkOrderByIdQuery(workOrderId);
+  const [
+    updateWorkOrder,
+    { isLoading: updateWorkOrderLoading, isError: updateWorkOrderError },
+  ] = useUpdateWorkOrderChecklistByIdMutation();
   const [isDiabled, setIsDisabled] = useState(true);
 
   const handleChange = (): void => {
@@ -26,7 +34,7 @@ const WorkOrderDetails = ({
   };
 
   const onFinish = (values: Record<string, boolean>): void => {
-    void updatePost({
+    void updateWorkOrder({
       id: workOrderId,
       checklist: createCheckListArray(values),
     }).unwrap();
@@ -34,68 +42,80 @@ const WorkOrderDetails = ({
 
   const handleDeleteTask = (task: IChecklist, taskName: string): void => {
     const newChecklist =
-      data?.checklist.filter((item) => item.task !== task.task) ?? [];
-    void updatePost({
+      workOrderdata?.checklist.filter((item) => item.task !== task.task) ?? [];
+    void updateWorkOrder({
       id: workOrderId,
       checklist: newChecklist,
-    }).unwrap();
-    setChecklist((prev) => prev.filter((item) => item.task !== taskName));
+    })
+      .unwrap()
+      .then(() => {
+        if (!updateWorkOrderError) {
+          setChecklist((prev) => prev.filter((item) => item.task !== taskName));
+        }
+      });
   };
 
   useEffect(() => {
-    if (data) {
-      setChecklist(data.checklist);
+    if (workOrderdata) {
+      setChecklist(workOrderdata.checklist);
     }
-  }, [data]);
+  }, [workOrderdata]);
 
   return (
-    <Descriptions title={data?.title} bordered column={3}>
-      <Descriptions.Item label="Descrição:" span={3}>
-        {data?.description}
-      </Descriptions.Item>
-      <Descriptions.Item label="Tarefas:" span={3}>
-        <Form onFinish={onFinish}>
-          {checklist.map((task) => (
-            <OptionWrapper key={task.task}>
-              {userData.isAdmin && (
-                <Form.Item>
-                  {isUpdating ? (
-                    <Spin />
-                  ) : (
-                    <Button
-                      type="primary"
-                      danger
-                      htmlType="button"
-                      onClick={() => {
-                        handleDeleteTask(task, task.task);
-                      }}
-                    >
-                      Deletar
-                    </Button>
+    <>
+      {workOrderLoading ? (
+        <Spin />
+      ) : (
+        <Descriptions title={workOrderdata?.title} bordered column={3}>
+          <Descriptions.Item label="Descrição:" span={3}>
+            {workOrderdata?.description}
+          </Descriptions.Item>
+          <Descriptions.Item label="Tarefas:" span={3}>
+            <Form onFinish={onFinish}>
+              {checklist.map((task) => (
+                <OptionWrapper key={task.task}>
+                  {userData.isAdmin && (
+                    <Form.Item>
+                      {updateWorkOrderLoading ? (
+                        <Spin />
+                      ) : (
+                        <Button
+                          type="primary"
+                          danger
+                          htmlType="button"
+                          onClick={() => {
+                            handleDeleteTask(task, task.task);
+                          }}
+                        >
+                          Deletar
+                        </Button>
+                      )}
+                    </Form.Item>
                   )}
-                </Form.Item>
+                  <Text>{task.task}: </Text>
+                  <Form.Item
+                    valuePropName="checked"
+                    name={task.task}
+                    initialValue={task.completed}
+                    noStyle
+                  >
+                    <Checkbox onChange={handleChange} />
+                  </Form.Item>
+                </OptionWrapper>
+              ))}
+              {updateWorkOrderLoading ? (
+                <Spin />
+              ) : (
+                <Button type="primary" htmlType="submit" disabled={isDiabled}>
+                  Salvar
+                </Button>
               )}
-              <Text>{task.task}: </Text>
-              <Form.Item
-                valuePropName="checked"
-                name={task.task}
-                initialValue={task.completed}
-                noStyle
-              >
-                <Checkbox onChange={handleChange} />
-              </Form.Item>
-            </OptionWrapper>
-          ))}
-          {isUpdating ? (
-            <Spin />
-          ) : (
-            <Button type="primary" htmlType="submit" disabled={isDiabled}>
-              Salvar
-            </Button>
-          )}
-        </Form>
-      </Descriptions.Item>
-    </Descriptions>
+            </Form>
+          </Descriptions.Item>
+        </Descriptions>
+      )}
+      {workOrderError && <Text color={red[6]}>Erro ao carregar</Text>}
+    </>
   );
 };
 

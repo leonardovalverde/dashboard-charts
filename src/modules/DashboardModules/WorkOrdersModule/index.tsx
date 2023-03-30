@@ -27,7 +27,10 @@ import { type WorkOrdersModuleProps } from "./types";
 
 const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
   const [tableData, setTableData] = useState<IWorkOrder[]>([]);
-  const [updatePost] = useDeleteWorkOrderByIdMutation();
+  const [
+    updateWorkOrders,
+    { isLoading: updateWorkOrdersLoading, isError: updateWorkOrdersIsError },
+  ] = useDeleteWorkOrderByIdMutation();
   const {
     data: workOrdersData,
     isLoading: workOrdersIsLoading,
@@ -51,8 +54,15 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
   }, [workOrdersData, userData.id, userData.isAdmin, workOrdersState]);
 
   const handleDelete = (id: string): void => {
-    void updatePost(id).unwrap();
-    setTableData((prev) => prev.filter((item) => item.id !== parseInt(id)));
+    void updateWorkOrders(id)
+      .unwrap()
+      .then(() => {
+        if (!updateWorkOrdersIsError) {
+          setTableData((prev) =>
+            prev.filter((item) => item.id !== parseInt(id))
+          );
+        }
+      });
   };
 
   const workOrdersTableData =
@@ -80,6 +90,7 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
             columns={workOrdersColumns({
               isAdmin: !!userData.isAdmin,
               handleDelete,
+              isLoading: updateWorkOrdersLoading,
             })}
             pagination={{
               pageSize: 20,

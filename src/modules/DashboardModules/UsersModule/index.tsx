@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import SortingTable from "components/Table/SortingTable/SortingTable";
+import Text from "components/Typography/Text";
 import { useGetAllUnitsQuery } from "services/units/units";
 import { type IUser } from "services/users/types";
 import {
@@ -8,7 +9,7 @@ import {
   useGetAllUsersQuery,
 } from "services/users/users";
 
-import { blue } from "@ant-design/colors";
+import { blue, red } from "@ant-design/colors";
 
 import { LoadingWrapper } from "../styles";
 import { getUsersOfSameCompany } from "../utils/functions";
@@ -20,22 +21,38 @@ import { type UsersModuleProps } from "./types";
 
 const UsersModule = ({ userData }: UsersModuleProps): JSX.Element => {
   const [users, setUsers] = useState<IUser[]>([]);
-  const [updatePost] = useDeleteUserByIdMutation();
-  const { data, isLoading } = useGetAllUsersQuery();
-  const { data: dataUnit, isLoading: isLoadingUnit } = useGetAllUnitsQuery();
+  const [
+    updateUser,
+    { isLoading: updateUserLoading, isError: updateUsersIsError },
+  ] = useDeleteUserByIdMutation();
+  const {
+    data: dataUsers,
+    isLoading: isLoadingUsers,
+    isError: isErrorUsers,
+  } = useGetAllUsersQuery();
+  const {
+    data: dataUnit,
+    isLoading: isLoadingUnit,
+    isError: isErrorUnit,
+  } = useGetAllUnitsQuery();
 
   useEffect(() => {
-    if (data) {
-      setUsers(getUsersOfSameCompany(userData.companyId, data));
+    if (dataUsers) {
+      setUsers(getUsersOfSameCompany(userData.companyId, dataUsers));
     }
-  }, [data, userData.companyId]);
+  }, [dataUsers, userData.companyId]);
 
   const handleDelete = (key: string): void => {
-    void updatePost(key).unwrap();
-    setUsers((prev) => prev.filter((item) => item.id !== parseInt(key)));
+    void updateUser(key)
+      .unwrap()
+      .then(() => {
+        if (!updateUsersIsError) {
+          setUsers((prev) => prev.filter((item) => item.id !== parseInt(key)));
+        }
+      });
   };
 
-  const usersData =
+  const usersTableData =
     users.map((user) => {
       return {
         key: user.id,
@@ -47,7 +64,7 @@ const UsersModule = ({ userData }: UsersModuleProps): JSX.Element => {
 
   return (
     <>
-      {isLoading || isLoadingUnit ? (
+      {isLoadingUsers || isLoadingUnit ? (
         <LoadingWrapper>
           <Spin />
         </LoadingWrapper>
@@ -58,8 +75,9 @@ const UsersModule = ({ userData }: UsersModuleProps): JSX.Element => {
             columns={usersColumns({
               isAdmin: !!userData.isAdmin,
               handleDelete,
+              isLoading: updateUserLoading,
             })}
-            data={usersData}
+            data={usersTableData}
             pagination={{
               pageSize: 20,
               position: ["bottomCenter"],
@@ -67,6 +85,16 @@ const UsersModule = ({ userData }: UsersModuleProps): JSX.Element => {
               hideOnSinglePage: true,
             }}
           />
+          {isErrorUnit && (
+            <Text color={red[6]}>
+              Não foi possível carregar os dados das unidades
+            </Text>
+          )}
+          {isErrorUsers && (
+            <Text color={red[6]}>
+              Não foi possível carregar os dados dos usuários
+            </Text>
+          )}
         </Container>
       )}
     </>
