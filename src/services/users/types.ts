@@ -1,5 +1,5 @@
-import { IUnit } from "services/units/types";
-import { ICompany } from "services/companies/types";
+import { type ICompany } from "services/companies/types";
+import { type IUnit } from "services/units/types";
 
 export interface IUser {
   companyId: number;
