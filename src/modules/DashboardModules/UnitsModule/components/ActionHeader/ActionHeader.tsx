@@ -26,7 +26,7 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
   return (
     <AdminContainer>
       <Button type="primary" onClick={toggleModal}>
-        Criar novo ativo
+        Criar nova unidade
       </Button>
       <Modal
         open={isOpen}
