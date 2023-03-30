@@ -1,8 +1,8 @@
 import { type IAsset } from "services/assets/types";
 import { type IUser } from "services/users/types";
-import { type IWorkOrder } from "services/workOrders/types";
+import { type IChecklist, type IWorkOrder } from "services/workOrders/types";
 
-import { gray,green, orange, red, yellow } from "@ant-design/colors";
+import { gray, green, orange, red, yellow } from "@ant-design/colors";
 
 const getOnlyAsignedAssets = (assets: IAsset[], userId: number): IAsset[] => {
   const assetsByUser = assets.filter((asset) =>
@@ -12,8 +12,10 @@ const getOnlyAsignedAssets = (assets: IAsset[], userId: number): IAsset[] => {
 };
 
 const orderAssetsByScore = (assets: IAsset[]): IAsset[] => {
-  const assetsArray = [...assets]
-  const orderedAssets = assetsArray.sort((a, b) => b.healthscore - a.healthscore);
+  const assetsArray = [...assets];
+  const orderedAssets = assetsArray.sort(
+    (a, b) =>  b.healthscore - a.healthscore
+  );
   return orderedAssets;
 };
 
@@ -118,7 +120,7 @@ const getWorkOrdersByAssignedUserId = (
   return workOrdersByAssignedUserId;
 };
 
-const createCheckListArray = (object: any): any[] => {
+const createCheckListArray = (object: any): IChecklist[] => {
   const arrayOfObjects = Object.keys(object).map((key) => ({
     completed: object[key],
     task: key,
@@ -126,9 +128,23 @@ const createCheckListArray = (object: any): any[] => {
   return arrayOfObjects;
 };
 
+const createTaskWithStatus = (
+  tasks: Array<Record<string, string>>
+): IChecklist[] => {
+  const tasksWithStatus = tasks.map((task) => {
+    const taskWithStatus = {
+      task: Object.keys(task)[0],
+      completed: false,
+    };
+    return taskWithStatus;
+  });
+  return tasksWithStatus as IChecklist[];
+};
+
 export {
   countAssetsWithStatus,
   createCheckListArray,
+  createTaskWithStatus,
   getAssetsNameByStatus,
   getColorByPriority,
   getColorByProgress,
