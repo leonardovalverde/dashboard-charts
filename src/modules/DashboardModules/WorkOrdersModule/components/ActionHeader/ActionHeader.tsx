@@ -1,17 +1,12 @@
 import { useState } from "react";
 import { Button, Form, Input, Modal, Select, Tooltip } from "antd";
+import { AdminContainer, ButtonsWrapper, ItemWrapper, StyledFormItem } from "modules/DashboardModules/styles";
 import { createTaskWithStatus } from "modules/DashboardModules/utils/functions";
 import { useCreateWorkOrderMutation } from "services/workOrders/workOrders";
 import { spacings } from "ui-tokens/spacings";
 
 import { MinusCircleOutlined } from "@ant-design/icons";
 
-import {
-  AdminContainer,
-  ButtonsWrapper,
-  StyledFormItem,
-  TaskWrapper,
-} from "./styles";
 import { type IFormValues } from "./types";
 
 const ActionHeader = (): JSX.Element => {
@@ -118,7 +113,7 @@ const ActionHeader = (): JSX.Element => {
             {(fields, { add, remove }, { errors }) => (
               <>
                 {fields.map(({ key, name, ...restField }) => (
-                  <TaskWrapper key={key}>
+                  <ItemWrapper key={key}>
                     <StyledFormItem
                       {...restField}
                       label="Nova tarefa"
@@ -140,7 +135,7 @@ const ActionHeader = (): JSX.Element => {
                         remove(name);
                       }}
                     />
-                  </TaskWrapper>
+                  </ItemWrapper>
                 ))}
                 <Form.Item>
                   <Button
