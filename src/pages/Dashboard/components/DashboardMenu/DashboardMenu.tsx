@@ -1,10 +1,15 @@
-import { Menu, Switch } from "antd";
+import { Switch } from "antd";
 import Paragraph from "components/Typography/Paragraph";
 import { items } from "pages/Dashboard/menuConstants";
 import { useDispatch } from "react-redux/es/exports";
 import { setUser } from "store/slice/userSlice";
 
-import { CompanyContainer, StyledSider, ToggleAdminContainer } from "./styles";
+import {
+  CompanyContainer,
+  StyledMenu,
+  StyledSider,
+  ToggleAdminContainer,
+} from "./styles";
 import { type DashboardMenuProps } from "./types";
 const DashboardMenu = ({
   onClick,
@@ -33,12 +38,9 @@ const DashboardMenu = ({
           {unitName}
         </Paragraph>
       </CompanyContainer>
-      <Menu
+      <StyledMenu
         theme="dark"
         onClick={onClick}
-        style={{
-          width: "100%",
-        }}
         selectedKeys={[current]}
         mode="inline"
         items={items}

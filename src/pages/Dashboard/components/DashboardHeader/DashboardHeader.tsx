@@ -2,11 +2,7 @@ import { useState } from "react";
 import { Button, Dropdown, Image, type MenuProps } from "antd";
 import useAuth from "hooks/useAuth";
 
-import {
-  DownOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-} from "@ant-design/icons";
+import { DownOutlined } from "@ant-design/icons";
 
 import DashboardMobileMenu from "../DashboardMobileMenu/DashboardMobileMenu";
 
@@ -16,6 +12,8 @@ import {
   HeaderLeftSection,
   HeaderRightSection,
   NameContainer,
+  StyledMenuFoldOutlined,
+  StyledMenuUnfoldOutlined,
   StyledText,
 } from "./styles";
 import { type DashboardHeaderProps } from "./types";
@@ -63,9 +61,9 @@ const DashboardHeader = ({
           style={{ paddingBottom: 0 }}
         >
           {collapsed ? (
-            <MenuUnfoldOutlined style={{ fontSize: "18px" }} />
+            <StyledMenuUnfoldOutlined />
           ) : (
-            <MenuFoldOutlined style={{ fontSize: "18px" }} />
+            <StyledMenuFoldOutlined />
           )}
         </Button>
       </HeaderLeftSection>

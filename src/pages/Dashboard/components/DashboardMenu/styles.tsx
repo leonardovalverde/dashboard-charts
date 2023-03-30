@@ -1,3 +1,4 @@
+import { Menu } from "antd";
 import Sider from "antd/es/layout/Sider";
 import styled from "styled-components";
 import { breakpoints } from "ui-tokens/breakpoints";
@@ -25,4 +26,8 @@ const ToggleAdminContainer = styled.div`
   bottom: ${spacings.x4}px;
 `;
 
-export { CompanyContainer, StyledSider, ToggleAdminContainer };
+const StyledMenu = styled(Menu)`
+  width: 100%;
+`;
+
+export { CompanyContainer, StyledMenu, StyledSider, ToggleAdminContainer };

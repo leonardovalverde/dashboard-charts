@@ -4,7 +4,7 @@ import { breakpoints } from "ui-tokens/breakpoints";
 import { spacings } from "ui-tokens/spacings";
 
 import { blue } from "@ant-design/colors";
-import { RadarChartOutlined } from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined,RadarChartOutlined } from "@ant-design/icons";
 
 const Container = styled.header`
   display: flex;
@@ -87,6 +87,14 @@ const DropDownWrapper = styled.div`
   cursor: pointer;
 `;
 
+const StyledMenuUnfoldOutlined = styled(MenuUnfoldOutlined)`
+  font-size: 18px;
+`;
+
+const StyledMenuFoldOutlined = styled(MenuFoldOutlined)`
+  font-size: 18px;
+`;
+
 export {
   Container,
   DropDownWrapper,
@@ -95,6 +103,8 @@ export {
   NameContainer,
   StyledDivider,
   StyledMenu,
+  StyledMenuFoldOutlined,
+  StyledMenuUnfoldOutlined,
   StyledRadarChartOutlined,
   StyledText,
 };
