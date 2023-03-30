@@ -24,8 +24,18 @@ const UserInfoWrapper = styled.div`
 `;
 
 const SignOutButtonWrapper = styled.div`
-
-
+  display: flex;
+  position: fixed;
+  bottom: ${spacings.x5}px;
+  transform: translateX(-50%);
+  left: 50%;
+  z-index: 10;
+  width: 90%;
 `;
 
-export { Container, SignOutButtonWrapper, UserInfoWrapper };
+const SwitchContainer = styled.div`
+  display: flex;
+  margin: ${spacings.x6}px 0 ${spacings.x6}px ${spacings.x6}px;
+`;
+
+export { Container, SignOutButtonWrapper, SwitchContainer, UserInfoWrapper };

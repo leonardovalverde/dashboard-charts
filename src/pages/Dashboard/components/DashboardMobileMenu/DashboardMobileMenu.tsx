@@ -1,10 +1,18 @@
-import { Button, Menu, Spin } from "antd";
+import { Button, Menu, Spin, Switch } from "antd";
 import Paragraph from "components/Typography/Paragraph";
+import useAuth from "hooks/useAuth";
 import { items } from "pages/Dashboard/menuConstants";
+import { useDispatch } from "react-redux";
 import { useGetCompanyByIdQuery } from "services/companies/companies";
 import { useGetUnitByIdQuery } from "services/units/units";
+import { setUser } from "store/slice/userSlice";
 
-import { Container, SignOutButtonWrapper, UserInfoWrapper } from "./styles";
+import {
+  Container,
+  SignOutButtonWrapper,
+  SwitchContainer,
+  UserInfoWrapper,
+} from "./styles";
 import { type DashboardMobileMenuProps } from "./types";
 
 const DashboardMobileMenu = ({
@@ -14,8 +22,18 @@ const DashboardMobileMenu = ({
   userData,
 }: DashboardMobileMenuProps): JSX.Element => {
   const { data, isLoading } = useGetUnitByIdQuery(userData.unitId);
+  const { signOut } = useAuth();
+  const dispatch = useDispatch();
   const { data: companyData, isLoading: companyIsLoading } =
     useGetCompanyByIdQuery(userData.companyId);
+
+  const handleAdminMode = (value: boolean): void => {
+    if (value && value) {
+      dispatch(setUser({ ...userData, isAdmin: true }));
+    } else {
+      dispatch(setUser({ ...userData, isAdmin: false }));
+    }
+  };
 
   return (
     <>
@@ -40,13 +58,18 @@ const DashboardMobileMenu = ({
             mode="inline"
             items={items}
           />
-          <SignOutButtonWrapper>
-            <Button
-              type="default"
-              onClick={() => {
-                window.location.reload();
+          <SwitchContainer>
+            <Switch
+              checkedChildren="Modo Admin"
+              unCheckedChildren="Modo Usuário"
+              onChange={(value) => {
+                handleAdminMode(value);
               }}
-            >
+              defaultChecked={userData.isAdmin}
+            />
+          </SwitchContainer>
+          <SignOutButtonWrapper>
+            <Button type="default" onClick={signOut} style={{ width: "100%" }}>
               Sair
             </Button>
           </SignOutButtonWrapper>
