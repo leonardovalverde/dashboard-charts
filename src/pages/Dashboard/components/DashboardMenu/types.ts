@@ -1,5 +1,5 @@
-import { MenuProps } from "antd";
-import { IUser } from "services/users/types";
+import { type MenuProps } from "antd";
+import { type IUser } from "services/users/types";
 
 export interface DashboardMenuProps {
   onClick: MenuProps["onClick"];

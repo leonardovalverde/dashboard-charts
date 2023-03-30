@@ -1,34 +1,13 @@
 import { Menu, Spin, Switch } from "antd";
 import Paragraph from "components/Typography/Paragraph";
+import { items } from "pages/Dashboard/menuConstants";
 import { useDispatch } from "react-redux/es/exports";
 import { useGetCompanyByIdQuery } from "services/companies/companies";
 import { useGetUnitByIdQuery } from "services/units/units";
 import { setUser } from "store/slice/userSlice";
-import { getItem, type MenuItem } from "utils/functions";
-
-import {
-  AppstoreOutlined,
-  AreaChartOutlined,
-  DeploymentUnitOutlined,
-  SettingOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
 
 import { CompanyContainer, StyledSider, ToggleAdminContainer } from "./styles";
 import { type DashboardMenuProps } from "./types";
-
-const items: MenuItem[] = [
-  getItem("Início", "home", <AreaChartOutlined />),
-
-  getItem("Ordens de serviço", "workOrders", <SettingOutlined />),
-
-  getItem("Ativos", "assets", <AppstoreOutlined />),
-
-  getItem("Usuários", "users", <UserOutlined />),
-
-  getItem("Unidades", "units", <DeploymentUnitOutlined />),
-];
-
 const DashboardMenu = ({
   onClick,
   current,
@@ -74,7 +53,6 @@ const DashboardMenu = ({
         style={{
           width: "100%",
         }}
-        defaultOpenKeys={["sub1"]}
         selectedKeys={[current]}
         mode="inline"
         items={items}
