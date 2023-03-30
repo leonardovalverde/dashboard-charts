@@ -40,7 +40,7 @@ const HealthChart = ({ assets }: HealthChartProps): JSX.Element => {
       rules: [
         {
           condition: {
-            maxWidth: breakpoints.tablet,
+            maxWidth: breakpoints.smallTablet,
           },
           chartOptions: {
             chart: {
@@ -52,7 +52,13 @@ const HealthChart = ({ assets }: HealthChartProps): JSX.Element => {
     },
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={options}
+      containerProps={{ style: { width: "100%" } }}
+    />
+  );
 };
 
 export default HealthChart;

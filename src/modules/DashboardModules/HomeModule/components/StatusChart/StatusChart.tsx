@@ -37,6 +37,7 @@ const StatusChart = ({ assets }: HealthChartProps): JSX.Element => {
     chart: {
       backgroundColor: "transparent",
       type: "bar",
+      reflow: true,
     },
     responsive: {
       rules: [
@@ -54,7 +55,13 @@ const StatusChart = ({ assets }: HealthChartProps): JSX.Element => {
     },
   };
 
-  return <HighchartsReact highcharts={Highcharts} options={options} />;
+  return (
+    <HighchartsReact
+      highcharts={Highcharts}
+      options={options}
+      containerProps={{ style: { width: "100%" } }}
+    />
+  );
 };
 
 export default StatusChart;
