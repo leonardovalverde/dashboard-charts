@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { Button, Spin, Tag } from "antd";
-import { type ColumnsType } from "antd/es/table";
+import { Spin } from "antd";
 import SortingTable from "components/Table/SortingTable/SortingTable";
+import Text from "components/Typography/Text";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux/es/exports";
 import { type IWorkOrder } from "services/workOrders/types";
@@ -14,33 +14,33 @@ import {
   setWorkOrders,
 } from "store/slice/workOrdersSlice";
 
-import { blue } from "@ant-design/colors";
+import { blue, red } from "@ant-design/colors";
 
-import { translatedPriority, translatedStatus } from "../constants";
 import { LoadingWrapper } from "../styles";
-import {
-  getColorByPriority,
-  getColorByProgress,
-  getWorkOrdersByAssignedUserId,
-} from "../utils/functions";
+import { getWorkOrdersByAssignedUserId } from "../utils/functions";
 
 import ActionHeader from "./components/ActionHeader/ActionHeader";
 import WorkOrderDetails from "./components/WorkOrderDetails/WorkOrderDetails";
+import { columns } from "./columns";
 import { Container } from "./styles";
 import { type WorkOrdersModuleProps } from "./types";
 
 const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
   const [tableData, setTableData] = useState<IWorkOrder[]>([]);
   const [updatePost] = useDeleteWorkOrderByIdMutation();
-  const { data, isLoading } = useGetAllWorkOrdersQuery();
+  const {
+    data: workOrdersData,
+    isLoading: workOrdersIsLoading,
+    error: workOrdersError,
+  } = useGetAllWorkOrdersQuery();
   const workOrdersState = useSelector(
     (state: IWorkOrderState) => state.workOrders
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(setWorkOrders(data));
-  }, [data, dispatch]);
+    dispatch(setWorkOrders(workOrdersData));
+  }, [workOrdersData, dispatch]);
 
   useEffect(() => {
     if (workOrdersState && userData.isAdmin) {
@@ -48,72 +48,14 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
     } else if (workOrdersState) {
       setTableData(getWorkOrdersByAssignedUserId(userData.id, workOrdersState));
     }
-  }, [data, userData.id, userData.isAdmin, workOrdersState]);
+  }, [workOrdersData, userData.id, userData.isAdmin, workOrdersState]);
 
   const handleDelete = (id: string): void => {
     void updatePost(id).unwrap();
     setTableData((prev) => prev.filter((item) => item.id !== parseInt(id)));
   };
 
-  const columns: ColumnsType<any> = [
-    {
-      title: "id",
-      dataIndex: "id",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.id - b.id,
-    },
-    {
-      title: "Nome",
-      dataIndex: "name",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.name.toString().localeCompare(b.name.toString()),
-    },
-    {
-      title: "prioridade",
-      dataIndex: "priority",
-      defaultSortOrder: "descend",
-      sorter: (a, b) =>
-        a.priority.toString().localeCompare(b.priority.toString()),
-      render: (priority: string) => {
-        return (
-          <Tag color={getColorByPriority(priority)}>
-            {translatedPriority[priority]}
-          </Tag>
-        );
-      },
-    },
-    {
-      title: "status",
-      dataIndex: "status",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.status.toString().localeCompare(b.status.toString()),
-      render: (status: string) => {
-        return (
-          <Tag color={getColorByProgress(status)}>
-            <strong>{translatedStatus[status]}</strong>
-          </Tag>
-        );
-      },
-    },
-    {
-      title: "Ações",
-      dataIndex: "actions",
-      className: userData.isAdmin ? "" : "hidden",
-      render: (_, record: { id: string }) => (
-        <Button
-          type="primary"
-          danger
-          onClick={() => {
-            handleDelete(record.id);
-          }}
-        >
-          Deletar
-        </Button>
-      ),
-    },
-  ];
-
-  const workOrdersData =
+  const workOrdersTableData =
     tableData.map((workOrder) => {
       return {
         key: workOrder.id,
@@ -126,7 +68,7 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
 
   return (
     <>
-      {isLoading ? (
+      {workOrdersIsLoading ? (
         <LoadingWrapper>
           <Spin />
         </LoadingWrapper>
@@ -134,8 +76,8 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
         <Container>
           {userData.isAdmin && <ActionHeader />}
           <SortingTable
-            data={workOrdersData}
-            columns={columns}
+            data={workOrdersTableData}
+            columns={columns({ isAdmin: !!userData.isAdmin, handleDelete })}
             pagination={{
               pageSize: 20,
               position: ["bottomCenter"],
@@ -148,6 +90,9 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
               ),
             }}
           />
+          {workOrdersError && (
+            <Text color={red[6]}>Não foi possível carregar os dados</Text>
+          )}
         </Container>
       )}
     </>
