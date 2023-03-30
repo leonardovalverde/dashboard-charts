@@ -1,10 +1,8 @@
-import { Button, Menu, Spin, Switch } from "antd";
+import { Button, Menu, Switch } from "antd";
 import Paragraph from "components/Typography/Paragraph";
 import useAuth from "hooks/useAuth";
 import { items } from "pages/Dashboard/menuConstants";
 import { useDispatch } from "react-redux";
-import { useGetCompanyByIdQuery } from "services/companies/companies";
-import { useGetUnitByIdQuery } from "services/units/units";
 import { setUser } from "store/slice/userSlice";
 
 import {
@@ -20,13 +18,11 @@ const DashboardMobileMenu = ({
   current,
   colapsed,
   userData,
+  companyName,
+  unitName,
 }: DashboardMobileMenuProps): JSX.Element => {
-  const { data, isLoading } = useGetUnitByIdQuery(userData.unitId);
   const { signOut } = useAuth();
   const dispatch = useDispatch();
-  const { data: companyData, isLoading: companyIsLoading } =
-    useGetCompanyByIdQuery(userData.companyId);
-
   const handleAdminMode = (value: boolean): void => {
     if (value && value) {
       dispatch(setUser({ ...userData, isAdmin: true }));
@@ -44,12 +40,8 @@ const DashboardMobileMenu = ({
           <UserInfoWrapper>
             <Paragraph color="#fff">{userData.name}</Paragraph>
             <Paragraph color="#fff">ID: {userData.id}</Paragraph>
-            <Paragraph color="#fff">
-              {isLoading ? <Spin /> : data?.name}
-            </Paragraph>
-            <Paragraph color="#fff">
-              {companyIsLoading ? <Spin /> : companyData?.name}
-            </Paragraph>
+            <Paragraph color="#fff">{unitName}</Paragraph>
+            <Paragraph color="#fff">{companyName}</Paragraph>
           </UserInfoWrapper>
           <Menu
             theme="dark"

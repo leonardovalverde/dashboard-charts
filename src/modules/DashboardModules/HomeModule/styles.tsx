@@ -6,8 +6,9 @@ import { blue } from "@ant-design/colors";
 
 const Container = styled.div`
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 2fr 3fr;
   height: calc(100vh - 60px);
+  width: 100%;
 
   @media (max-width: ${breakpoints.tablet}px) {
     display: flex;
@@ -27,8 +28,8 @@ const ChartWrapper = styled.div<{ backgroundColor?: string }>`
   background-color: ${({ backgroundColor = "transparent" }) => backgroundColor};
   display: flex;
   width: 100%;
-  justify-content: center;
   align-items: center;
+  height: 100%;
 
   @media (max-width: ${breakpoints.tablet}px) {
     width: 100vw;

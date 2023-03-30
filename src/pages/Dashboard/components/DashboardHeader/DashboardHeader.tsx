@@ -31,6 +31,8 @@ const DashboardHeader = ({
   userData,
   current,
   onClick,
+  companyName,
+  unitName,
 }: DashboardHeaderProps): JSX.Element => {
   const { signOut } = useAuth();
   const [collapsed, setCollapsed] = useState<boolean>(true);
@@ -91,6 +93,8 @@ const DashboardHeader = ({
         onClick={handleCollapsed}
         colapsed={collapsed}
         userData={userData}
+        companyName={companyName}
+        unitName={unitName}
       />
     </Container>
   );
