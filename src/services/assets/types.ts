@@ -1,14 +1,15 @@
-export interface IHealthHistory {
-  [index: number]: {
+export type IHealthHistory = Record<
+  number,
+  {
     status: string;
     timestamp: string;
-  };
-}
+  }
+>;
 
 export interface ISpecifications {
-    maxTemp: number;
-    power?: number;
-    rpm?: number | null;
+  maxTemp: number;
+  power?: number;
+  rpm?: number | null;
 }
 
 export interface IAsset {
@@ -16,7 +17,7 @@ export interface IAsset {
   companyId: number;
   healthHistory: IHealthHistory;
   healthscore: number;
-  id: number;
+  id: number | string;
   image: string;
   metrics: {
     lastUptimeAt: string;

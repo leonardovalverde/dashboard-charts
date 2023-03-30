@@ -14,7 +14,25 @@ export const assetsQueries = createApi({
     getAssetsById: builder.query<IAsset, string>({
       query: (id: number | string) => endpoints.assets.getById(id),
     }),
+    deleteAssetById: builder.mutation<IAsset, string>({
+      query: (id: number | string) => ({
+        url: endpoints.assets.getById(id),
+        method: "DELETE",
+      }),
+    }),
+    createAsset: builder.mutation<IAsset, Partial<IAsset>>({
+      query: (asset: IAsset) => ({
+        url: endpoints.assets.getAll,
+        method: "POST",
+        body: asset,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllAssetsQuery, useGetAssetsByIdQuery } = assetsQueries;
+export const {
+  useGetAllAssetsQuery,
+  useGetAssetsByIdQuery,
+  useDeleteAssetByIdMutation,
+  useCreateAssetMutation,
+} = assetsQueries;
