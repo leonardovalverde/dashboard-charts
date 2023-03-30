@@ -1,0 +1,33 @@
+version: 2.1
+jobs:
+  build:
+    working_directory: ~/project
+    docker:
+      - image: cimg/node:17.4.0
+    steps:
+      - checkout
+      - run: yarn add eslint
+      - run: yarn lint
+      - run:
+          name: Update NPM
+          command: "sudo yarn global add yarn"
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install Dependencies
+          command: yarn
+      - run: yarn add -D firebase-tools    
+      - save_cache:
+          key: dependency-cache-{{ checksum "package-lock.json" }}
+          paths:
+            - ./node_modules
+      - run:
+          name: Build application for production
+          command: yarn build 
+      - run:
+          name: Deploy app to Firebase
+          command: ./node_modules/.bin/firebase deploy --token=$FIREBASE_TOKEN  
+workflows:
+  build-and-deploy:
+    jobs:
+      - build
