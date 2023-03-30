@@ -1,5 +1,5 @@
-import { TextProps } from "antd/es/typography/Text";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
+import { type TextProps } from "antd/es/typography/Text";
 
 export interface StyledTextProps extends TextProps {
   children: ReactNode;

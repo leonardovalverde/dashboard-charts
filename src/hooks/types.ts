@@ -1,8 +1,6 @@
 export interface IUseAuth {
-  signIn(email: string): Promise<void | string>;
-  signOut(): void;
+  signIn: (email: string) => Promise<void | string>;
+  signOut: () => void;
   error: string;
   isLoading: boolean;
 }
-
-export interface IUseAssets {}

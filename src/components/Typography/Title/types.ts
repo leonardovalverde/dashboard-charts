@@ -1,5 +1,5 @@
-import { TitleProps } from "antd/es/typography/Title";
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
+import { type TitleProps } from "antd/es/typography/Title";
 
 export interface StyledTitleProps extends TitleProps {
   children: ReactNode;
