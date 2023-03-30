@@ -10,8 +10,10 @@ import {
 
 import { blue } from "@ant-design/colors";
 
+import { LoadingWrapper } from "../styles";
+
 import ActionHeader from "./components/ActionHeader/ActionHeader";
-import { Container, LoadingWrapper } from "./styles";
+import { Container } from "./styles";
 import { type UnitsModuleProps } from "./type";
 
 const UnitsModule = ({ userData }: UnitsModuleProps): JSX.Element => {

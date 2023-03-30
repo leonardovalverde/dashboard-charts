@@ -11,10 +11,11 @@ import {
 
 import { blue } from "@ant-design/colors";
 
+import { LoadingWrapper } from "../styles";
 import { getUsersOfSameCompany } from "../utils/functions";
 
 import ActionHeader from "./components/ActionHeader/ActionHeader";
-import { Container, LoadingWrapper } from "./styles";
+import { Container } from "./styles";
 import { type UsersModuleProps } from "./types";
 
 const UsersModule = ({ userData }: UsersModuleProps): JSX.Element => {

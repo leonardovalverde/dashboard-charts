@@ -12,11 +12,12 @@ import { type IAsset } from "services/assets/types";
 import { blue } from "@ant-design/colors";
 
 import { StatusTranslate } from "../HomeModule/constants";
+import { LoadingWrapper } from "../styles";
 import { getColorByScore, getOnlyAsignedAssets } from "../utils/functions";
 
 import ActionHeader from "./components/ActionHeader/ActionHeader";
 import AssetDetails from "./components/AssetDetails/AssetDetails";
-import { Container, LoadingWrapper } from "./styles";
+import { Container } from "./styles";
 import { type AssetsModuleProps } from "./types";
 
 const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {

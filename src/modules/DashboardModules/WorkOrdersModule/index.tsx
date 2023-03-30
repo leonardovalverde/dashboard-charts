@@ -17,6 +17,7 @@ import {
 import { blue } from "@ant-design/colors";
 
 import { translatedPriority, translatedStatus } from "../constants";
+import { LoadingWrapper } from "../styles";
 import {
   getColorByPriority,
   getColorByProgress,
@@ -25,7 +26,7 @@ import {
 
 import ActionHeader from "./components/ActionHeader/ActionHeader";
 import WorkOrderDetails from "./components/WorkOrderDetails/WorkOrderDetails";
-import { Container, LoadingWrapper } from "./styles";
+import { Container } from "./styles";
 import { type WorkOrdersModuleProps } from "./types";
 
 const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
