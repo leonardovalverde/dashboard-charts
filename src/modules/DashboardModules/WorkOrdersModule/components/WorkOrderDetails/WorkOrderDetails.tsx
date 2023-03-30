@@ -1,5 +1,6 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Checkbox, Descriptions, Form, Spin } from "antd";
+import Text from "components/Typography/Text";
 import { createCheckListArray } from "modules/DashboardModules/utils/functions";
 import { type IChecklist } from "services/workOrders/types";
 import {
@@ -48,7 +49,7 @@ const WorkOrderDetails = ({
   }, [data]);
 
   return (
-    <Descriptions title={data?.title} bordered>
+    <Descriptions title={data?.title} bordered column={3}>
       <Descriptions.Item label="Descrição:" span={3}>
         {data?.description}
       </Descriptions.Item>
@@ -74,11 +75,12 @@ const WorkOrderDetails = ({
                   )}
                 </Form.Item>
               )}
+              <Text>{task.task}: </Text>
               <Form.Item
                 valuePropName="checked"
                 name={task.task}
-                label={task.task}
                 initialValue={task.completed}
+                noStyle
               >
                 <Checkbox onChange={handleChange} />
               </Form.Item>
