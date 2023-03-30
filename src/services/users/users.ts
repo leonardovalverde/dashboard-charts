@@ -14,7 +14,25 @@ export const usersQueries = createApi({
     getUserById: builder.query<IUser, string>({
       query: (id: string) => endpoints.users.getById(id),
     }),
+    deleteUserById: builder.mutation<IUser, string>({
+      query: (id: string) => ({
+        url: endpoints.users.getById(id),
+        method: "DELETE",
+      }),
+    }),
+    createUser: builder.mutation<IUser, Partial<IUser>>({
+      query: (user: Partial<IUser>) => ({
+        url: endpoints.users.getAll,
+        method: "POST",
+        body: user,
+      }),
+    }),
   }),
 });
 
-export const { useGetAllUsersQuery, useGetUserByIdQuery } = usersQueries;
+export const {
+  useGetAllUsersQuery,
+  useGetUserByIdQuery,
+  useDeleteUserByIdMutation,
+  useCreateUserMutation,
+} = usersQueries;
