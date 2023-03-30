@@ -33,6 +33,13 @@ export const workOrdersQueries = createApi({
         method: "DELETE",
       }),
     }),
+    createWorkOrder: builder.mutation<IWorkOrder, Partial<IWorkOrder>>({
+      query: (workOrder: IWorkOrder) => ({
+        url: endpoints.workOrders.getAll,
+        method: "POST",
+        body: workOrder,
+      }),
+    }),
   }),
 });
 
@@ -41,4 +48,5 @@ export const {
   useGetWorkOrderByIdQuery,
   useUpdateWorkOrderChecklistByIdMutation,
   useDeleteWorkOrderByIdMutation,
+  useCreateWorkOrderMutation,
 } = workOrdersQueries;

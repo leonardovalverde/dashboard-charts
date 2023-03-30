@@ -4,11 +4,11 @@ export interface IChecklist {
 }
 
 export interface IWorkOrder {
-  assetId: number;
+  assetId: number | string;
   assignedUserIds: number[];
   checklist: IChecklist[];
   description: string;
-  id: number;
+  id: number | string;
   priority: string;
   status: string;
   title: string;
