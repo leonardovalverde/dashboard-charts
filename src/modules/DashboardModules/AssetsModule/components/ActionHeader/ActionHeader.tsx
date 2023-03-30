@@ -30,7 +30,6 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
   };
 
   const handleCreateWorkOrder = (values: IFormValues): void => {
-    console.log(values);
     void updatePost({
       assignedUserIds: values.assignedIds.map((id) => parseInt(id)),
       companyId: userData.companyId,
