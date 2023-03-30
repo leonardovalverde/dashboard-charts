@@ -1,4 +1,4 @@
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { Spin } from "antd";
 import { useGetAllAssetsQuery } from "services/assets/assets";
 import { type IAsset } from "services/assets/types";

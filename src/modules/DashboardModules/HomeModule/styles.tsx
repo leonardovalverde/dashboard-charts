@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { breakpoints } from "ui-tokens/breakpoints";
 import { spacings } from "ui-tokens/spacings";
 
 import { blue } from "@ant-design/colors";
@@ -7,6 +8,12 @@ const Container = styled.div`
   display: grid;
   grid-template-columns: 1fr 3fr;
   height: calc(100vh - 60px);
+
+  @media (max-width: ${breakpoints.tablet}px) {
+    display: flex;
+    flex-direction: column;
+    margin-top: 60px;
+  }
 `;
 
 const ChartContainer = styled.div`
@@ -18,11 +25,14 @@ const ChartContainer = styled.div`
 
 const ChartWrapper = styled.div<{ backgroundColor?: string }>`
   background-color: ${({ backgroundColor = "transparent" }) => backgroundColor};
-  height: 100%;
   display: flex;
   width: 100%;
   justify-content: center;
   align-items: center;
+
+  @media (max-width: ${breakpoints.tablet}px) {
+    width: 100vw;
+  }
 `;
 
 const NotificationWrapper = styled.div`
@@ -33,6 +43,10 @@ const NotificationWrapper = styled.div`
   height: calc(100vh - 60px);
   justify-content: space-between;
   gap: ${spacings.x5}px;
+
+  @media (max-width: ${breakpoints.tablet}px) {
+    width: 100vw;
+  }
 `;
 
 const LoadingContainer = styled.div`
