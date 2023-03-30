@@ -5,11 +5,11 @@ import {
   countAssetsWithStatus,
   getColorByStatus,
 } from "modules/DashboardModules/utils/functions";
+import { breakpoints } from "ui-tokens/breakpoints";
 
 import { StatusTranslate } from "../../constants";
 
 import { type HealthChartProps } from "./types";
-
 
 const StatusChart = ({ assets }: HealthChartProps): JSX.Element => {
   const statusCounter = useMemo(() => countAssetsWithStatus(assets), [assets]);
@@ -37,6 +37,20 @@ const StatusChart = ({ assets }: HealthChartProps): JSX.Element => {
     chart: {
       backgroundColor: "transparent",
       type: "bar",
+    },
+    responsive: {
+      rules: [
+        {
+          condition: {
+            maxWidth: breakpoints.tablet,
+          },
+          chartOptions: {
+            chart: {
+              height: 300,
+            },
+          },
+        },
+      ],
     },
   };
 

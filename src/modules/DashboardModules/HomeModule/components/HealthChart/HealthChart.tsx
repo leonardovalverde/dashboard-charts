@@ -5,6 +5,7 @@ import {
   getColorByScore,
   orderAssetsByScore,
 } from "modules/DashboardModules/utils/functions";
+import { breakpoints } from "ui-tokens/breakpoints";
 
 import { type HealthChartProps } from "./types";
 
@@ -33,6 +34,21 @@ const HealthChart = ({ assets }: HealthChartProps): JSX.Element => {
     },
     chart: {
       backgroundColor: "transparent",
+      reflow: true,
+    },
+    responsive: {
+      rules: [
+        {
+          condition: {
+            maxWidth: breakpoints.tablet,
+          },
+          chartOptions: {
+            chart: {
+              height: 300,
+            },
+          },
+        },
+      ],
     },
   };
 
