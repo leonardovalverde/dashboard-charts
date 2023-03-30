@@ -6,8 +6,6 @@ jobs:
       - image: cimg/node:17.4.0
     steps:
       - checkout
-      - run: yarn add eslint
-      - run: yarn lint
       - run:
           name: Update NPM
           command: "sudo yarn global add yarn"
@@ -16,6 +14,9 @@ jobs:
       - run:
           name: Install Dependencies
           command: yarn
+      - run: 
+          name: Check lint
+          command: yarn lint
       - run: yarn add -D firebase-tools    
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
