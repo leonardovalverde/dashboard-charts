@@ -8,6 +8,7 @@
     "standard-with-typescript",
     "prettier"
   ],
+  "plugins": ["react", "simple-import-sort"],
   "overrides": [
     {
       "files": ["3.spaces.prettier.js"]
@@ -44,7 +45,6 @@
     "sourceType": "module",
     "project": "./tsconfig.json"
   },
-  "plugins": ["react", "simple-import-sort"],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "@typescript-eslint/consistent-type-assertions": "off",
