@@ -6,7 +6,7 @@ import { type IUserState } from "store/slice/userSlice";
 
 import DashboardHeader from "./components/DashboardHeader/DashboardHeader";
 import DashboardMenu from "./components/DashboardMenu/DashboardMenu";
-import { Container } from "./styles";
+import { Container, ContentWrapper } from "./styles";
 
 const Dashboard = (): JSX.Element => {
   const userData = useSelector((state: IUserState) => state.user);
@@ -17,17 +17,21 @@ const Dashboard = (): JSX.Element => {
   };
 
   return (
-    <>
-      <DashboardHeader userData={userData} />
-      <Container>
+    <Container>
+      <DashboardHeader
+        userData={userData}
+        current={current}
+        onClick={handleSelected}
+      />
+      <ContentWrapper>
         <DashboardMenu
           current={current}
           onClick={handleSelected}
           userData={userData}
         />
         <DashboardModulesRender current={current} userData={userData} />
-      </Container>
-    </>
+      </ContentWrapper>
+    </Container>
   );
 };
 
