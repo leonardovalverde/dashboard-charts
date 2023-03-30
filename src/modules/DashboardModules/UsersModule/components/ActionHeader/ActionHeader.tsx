@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Input, Modal, Select, Tooltip } from "antd";
+import { AdminContainer, ButtonsWrapper } from "modules/DashboardModules/styles";
 import { type IUnit } from "services/units/types";
 import { useGetAllUnitsQuery } from "services/units/units";
 import { useCreateUserMutation } from "services/users/users";
 
-import { AdminContainer, ButtonsWrapper } from "./styles";
 import { type ActionHeaderProps, type IFormValues } from "./types";
 
 const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {

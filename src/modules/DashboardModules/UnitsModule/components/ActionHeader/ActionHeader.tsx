@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button, Form, Input, Modal, Tooltip } from "antd";
+import { AdminContainer, ButtonsWrapper } from "modules/DashboardModules/styles";
 import { useCreateUnitMutation } from "services/units/units";
 
-import { AdminContainer, ButtonsWrapper } from "./styles";
 import { type ActionHeaderProps, type IFormValues } from "./types";
 
 const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {

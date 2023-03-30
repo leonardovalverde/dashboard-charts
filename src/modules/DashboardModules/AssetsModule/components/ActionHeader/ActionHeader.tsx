@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
 import { Button, Form, Input, InputNumber, Modal, Select, Tooltip } from "antd";
+import {
+  AdminContainer,
+  ButtonsWrapper,
+  ItemWrapper,
+  StyledFormItem,
+} from "modules/DashboardModules/styles";
 import { useCreateAssetMutation } from "services/assets/assets";
 import { type IUnit } from "services/units/types";
 import { useGetAllUnitsQuery } from "services/units/units";
@@ -8,12 +14,6 @@ import { useGetAllUsersQuery } from "services/users/users";
 
 import { MinusCircleOutlined } from "@ant-design/icons";
 
-import {
-  AdminContainer,
-  ButtonsWrapper,
-  StyledFormItem,
-  TaskWrapper,
-} from "./styles";
 import { type ActionHeaderProps, type IFormValues } from "./types";
 
 const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
@@ -204,7 +204,7 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
             {(fields, { add, remove }, { errors }) => (
               <>
                 {fields.map(({ key, name, ...restField }) => (
-                  <TaskWrapper key={key}>
+                  <ItemWrapper key={key}>
                     <StyledFormItem
                       {...restField}
                       label="Modelo do sensor"
@@ -226,7 +226,7 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
                         remove(name);
                       }}
                     />
-                  </TaskWrapper>
+                  </ItemWrapper>
                 ))}
                 <Form.Item>
                   <Button
