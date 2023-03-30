@@ -11,13 +11,17 @@ const useAuth = (): IUseAuth => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [error, setError] = useState<string>("");
-  const { data, isLoading } = useGetAllUsersQuery();
+  const {
+    data: dataUser,
+    isLoading: isLoadingUser,
+    isError: isErrorData,
+  } = useGetAllUsersQuery();
 
   const signIn = useCallback(
     async (email: string) => {
-      if (data != null) {
+      if (dataUser != null) {
         setError("");
-        const user = data.find((user) => user.email === email);
+        const user = dataUser.find((user) => user.email === email);
         if (user != null) {
           setError("");
           dispatch(
@@ -30,13 +34,13 @@ const useAuth = (): IUseAuth => {
         } else {
           setError("Usuário não encontrado");
         }
-      } else {
+      } else if (isErrorData) {
         setError(
           "Erro ao buscar usuários, por favor tente novamente mais tarde"
         );
       }
     },
-    [data, dispatch, navigate]
+    [dataUser, dispatch, navigate]
   );
 
   const signOut = useCallback(() => {
@@ -44,7 +48,7 @@ const useAuth = (): IUseAuth => {
     navigate("/");
   }, [dispatch, navigate]);
 
-  return { signIn, error, isLoading, signOut };
+  return { signIn, error, isLoading: isLoadingUser, signOut };
 };
 
 export default useAuth;
