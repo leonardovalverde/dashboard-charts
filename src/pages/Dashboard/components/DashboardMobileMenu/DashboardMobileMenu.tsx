@@ -1,4 +1,4 @@
-import { Button, Menu, Switch } from "antd";
+import { Menu, Switch } from "antd";
 import Paragraph from "components/Typography/Paragraph";
 import useAuth from "hooks/useAuth";
 import { items } from "pages/Dashboard/menuConstants";
@@ -8,6 +8,7 @@ import { setUser } from "store/slice/userSlice";
 import {
   Container,
   SignOutButtonWrapper,
+  StyledButton,
   SwitchContainer,
   UserInfoWrapper,
 } from "./styles";
@@ -61,9 +62,9 @@ const DashboardMobileMenu = ({
             />
           </SwitchContainer>
           <SignOutButtonWrapper>
-            <Button type="default" onClick={signOut} style={{ width: "100%" }}>
+            <StyledButton type="default" onClick={signOut}>
               Sair
-            </Button>
+            </StyledButton>
           </SignOutButtonWrapper>
         </Container>
       )}

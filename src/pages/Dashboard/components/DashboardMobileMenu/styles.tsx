@@ -1,3 +1,4 @@
+import { Button } from "antd";
 import styled from "styled-components";
 import { breakpoints } from "ui-tokens/breakpoints";
 import { spacings } from "ui-tokens/spacings";
@@ -38,4 +39,14 @@ const SwitchContainer = styled.div`
   margin: ${spacings.x6}px 0 ${spacings.x6}px ${spacings.x6}px;
 `;
 
-export { Container, SignOutButtonWrapper, SwitchContainer, UserInfoWrapper };
+const StyledButton = styled(Button)`
+  width: 100%;
+`;
+
+export {
+  Container,
+  SignOutButtonWrapper,
+  StyledButton,
+  SwitchContainer,
+  UserInfoWrapper,
+};
