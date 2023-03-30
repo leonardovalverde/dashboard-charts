@@ -12,7 +12,7 @@ const modules = (userData: IUser): IModules => {
   return {
     home: <HomeModule userData={userData} />,
     assets: <AssetsModule userData={userData} />,
-    units: <UnitsModule />,
+    units: <UnitsModule userData={userData} />,
     users: <UsersModule userData={userData} />,
     workOrders: <WorkOrdersModule userData={userData} />,
   };
@@ -25,8 +25,9 @@ const translatedPriority: Record<string, string> = {
 };
 
 const translatedStatus: Record<string, string> = {
-  completed: "Concluída",
+  completed: "Concluído",
   "in progress": "Em andamento",
+  open: "Aberto",
 };
 
 export { modules, translatedPriority, translatedStatus };
