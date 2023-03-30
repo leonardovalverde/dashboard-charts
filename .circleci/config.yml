@@ -16,7 +16,7 @@ jobs:
           command: yarn install --ignore-engines
       - run: 
           name: Check lint
-          command: yarn lint
+          command: yarn eslint
       - run: yarn add -D firebase-tools    
       - save_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
