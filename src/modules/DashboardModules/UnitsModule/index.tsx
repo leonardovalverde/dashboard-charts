@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Spin } from "antd";
-import { type ColumnsType } from "antd/es/table";
+import { Spin } from "antd";
 import SortingTable from "components/Table/SortingTable/SortingTable";
 import { type IUnit } from "services/units/types";
 import {
@@ -13,6 +12,7 @@ import { blue } from "@ant-design/colors";
 import { LoadingWrapper } from "../styles";
 
 import ActionHeader from "./components/ActionHeader/ActionHeader";
+import { unitsColumns } from "./columns";
 import { Container } from "./styles";
 import { type UnitsModuleProps } from "./type";
 
@@ -25,37 +25,6 @@ const UnitsModule = ({ userData }: UnitsModuleProps): JSX.Element => {
     void updatePost(key).unwrap();
     setUnits((prev) => prev.filter((item) => item.id !== parseInt(key)));
   };
-
-  const columns: ColumnsType<any> = [
-    {
-      title: "id",
-      dataIndex: "id",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.id - b.id,
-    },
-    {
-      title: "Nome",
-      dataIndex: "name",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.name.toString().localeCompare(b.name.toString()),
-    },
-    {
-      title: "Ações",
-      dataIndex: "actions",
-      className: userData.isAdmin ? "" : "hidden",
-      render: (_, record: { key: string }) => (
-        <Button
-          type="primary"
-          danger
-          onClick={() => {
-            handleDelete(record.key);
-          }}
-        >
-          Deletar
-        </Button>
-      ),
-    },
-  ];
 
   const unitsData =
     units?.map((unit) => {
@@ -83,7 +52,10 @@ const UnitsModule = ({ userData }: UnitsModuleProps): JSX.Element => {
           {userData.isAdmin && <ActionHeader userData={userData} />}
           <SortingTable
             data={unitsData}
-            columns={columns}
+            columns={unitsColumns({
+              isAdmin: !!userData.isAdmin,
+              handleDelete,
+            })}
             pagination={{
               pageSize: 20,
               position: ["bottomCenter"],

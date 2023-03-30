@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
-import { Button, Spin, Tag } from "antd";
-import { type ColumnsType } from "antd/es/table";
+import { Spin } from "antd";
 import SortingTable from "components/Table/SortingTable/SortingTable";
-import { getColorByStatus } from "modules/DashboardModules/utils/functions";
 import {
   useDeleteAssetByIdMutation,
   useGetAllAssetsQuery,
@@ -11,12 +9,12 @@ import { type IAsset } from "services/assets/types";
 
 import { blue } from "@ant-design/colors";
 
-import { StatusTranslate } from "../HomeModule/constants";
 import { LoadingWrapper } from "../styles";
-import { getColorByScore, getOnlyAsignedAssets } from "../utils/functions";
+import { getOnlyAsignedAssets } from "../utils/functions";
 
 import ActionHeader from "./components/ActionHeader/ActionHeader";
 import AssetDetails from "./components/AssetDetails/AssetDetails";
+import { assetsColumns } from "./columns";
 import { Container } from "./styles";
 import { type AssetsModuleProps } from "./types";
 
@@ -38,76 +36,6 @@ const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
     setAssets((prev) => prev.filter((item) => item.id !== parseInt(id)));
   };
 
-  const columns: ColumnsType<any> = [
-    {
-      title: "id",
-      dataIndex: "id",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.id - b.id,
-    },
-    {
-      title: "Nome",
-      dataIndex: "name",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.name.toString().localeCompare(b.name.toString()),
-    },
-    {
-      title: "Modelo",
-      dataIndex: "model",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.model.toString().localeCompare(b.model.toString()),
-    },
-    {
-      title: "Status",
-      dataIndex: "status",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.status.toString().localeCompare(b.status.toString()),
-      render: (status: string) => {
-        return (
-          <Tag color={getColorByStatus(status)}>
-            <strong>{StatusTranslate[status]}</strong>
-          </Tag>
-        );
-      },
-    },
-    {
-      title: "Saúde",
-      dataIndex: "healthscore",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.healthscore - b.healthscore,
-      render: (healthscore: number) => {
-        return (
-          <Tag color={getColorByScore(healthscore)}>
-            <strong>{healthscore}/100</strong>
-          </Tag>
-        );
-      },
-    },
-    {
-      title: "Sensores",
-      dataIndex: "sensors",
-      defaultSortOrder: "descend",
-      sorter: (a, b) =>
-        a.sensors.toString().localeCompare(b.sensors.toString()),
-    },
-    {
-      title: "Ações",
-      dataIndex: "actions",
-      className: userData.isAdmin ? "" : "hidden",
-      render: (_, record: { id: string }) => (
-        <Button
-          type="primary"
-          danger
-          onClick={() => {
-            handleDelete(record.id);
-          }}
-        >
-          Deletar
-        </Button>
-      ),
-    },
-  ];
-
   const assetsData = assets.map((asset) => ({
     key: asset.id,
     id: asset.id,
@@ -128,7 +56,10 @@ const AssetsModule = ({ userData }: AssetsModuleProps): JSX.Element => {
         <>
           {userData.isAdmin && <ActionHeader userData={userData} />}
           <SortingTable
-            columns={columns}
+            columns={assetsColumns({
+              isAdmin: !!userData.isAdmin,
+              handleDelete,
+            })}
             pagination={{
               pageSize: 20,
               position: ["bottomCenter"],

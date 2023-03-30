@@ -4,12 +4,15 @@ import { type ColumnsType } from "antd/es/table";
 import { translatedPriority, translatedStatus } from "../constants";
 import { getColorByPriority, getColorByProgress } from "../utils/functions";
 
-interface IColumns {
+interface IWorkOrdersColumns {
   isAdmin: boolean;
   handleDelete: (id: string) => void;
 }
 
-const columns = ({ isAdmin, handleDelete }: IColumns): ColumnsType<any> => [
+const workOrdersColumns = ({
+  isAdmin,
+  handleDelete,
+}: IWorkOrdersColumns): ColumnsType<any> => [
   {
     title: "id",
     dataIndex: "id",
@@ -67,4 +70,4 @@ const columns = ({ isAdmin, handleDelete }: IColumns): ColumnsType<any> => [
   },
 ];
 
-export { columns };
+export { workOrdersColumns };

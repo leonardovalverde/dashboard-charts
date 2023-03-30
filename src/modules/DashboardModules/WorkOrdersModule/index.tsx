@@ -21,7 +21,7 @@ import { getWorkOrdersByAssignedUserId } from "../utils/functions";
 
 import ActionHeader from "./components/ActionHeader/ActionHeader";
 import WorkOrderDetails from "./components/WorkOrderDetails/WorkOrderDetails";
-import { columns } from "./columns";
+import { workOrdersColumns } from "./columns";
 import { Container } from "./styles";
 import { type WorkOrdersModuleProps } from "./types";
 
@@ -77,7 +77,10 @@ const WorkOrdersModule = ({ userData }: WorkOrdersModuleProps): JSX.Element => {
           {userData.isAdmin && <ActionHeader />}
           <SortingTable
             data={workOrdersTableData}
-            columns={columns({ isAdmin: !!userData.isAdmin, handleDelete })}
+            columns={workOrdersColumns({
+              isAdmin: !!userData.isAdmin,
+              handleDelete,
+            })}
             pagination={{
               pageSize: 20,
               position: ["bottomCenter"],
