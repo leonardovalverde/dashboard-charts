@@ -16,12 +16,12 @@ import { ProgressWrapper } from "./styles";
 import { type AssetDetailsProps } from "./types";
 
 const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
+  const [assetData, setAssetData] = useState<IAsset>({} as IAsset);
   const {
     data: assetsData,
     isLoading: assetsLoading,
     isError: assetsIsError,
   } = useGetAssetsByIdQuery(assetId);
-  const [assetData, setAssetData] = useState<IAsset>({} as IAsset);
   const {
     data: unitData,
     isLoading: unitIsLoading,
@@ -61,39 +61,41 @@ const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
             {unitIsError && <Tag color="error">Não foi possível carregar</Tag>}
           </Descriptions.Item>
           <Descriptions.Item span={3} label="Especificações:">
-            Temperatura Máxima: {assetData.specifications.maxTemp}°C
+            {assetData.specifications?.maxTemp && (
+              <>Temperatura Máxima: {assetData.specifications.maxTemp}°C</>
+            )}
             <br />
-            {assetData.specifications.rpm && (
+            {assetData.specifications?.rpm && (
               <>RPM (Rotações por minuto): {assetData.specifications.rpm}</>
             )}
             <br />
-            {assetData.specifications.power && (
+            {assetData.specifications?.power && (
               <>Potência: {assetData.specifications.power}W</>
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Métricas:">
-            Total de coletas: {assetData.metrics.totalCollectsUptime}
+            Total de coletas: {assetData.metrics?.totalCollectsUptime}
             <br />
             Horas em funcionamento:{" "}
-            {assetData.metrics.totalUptime &&
+            {assetData.metrics?.totalUptime &&
               Math.round(assetData.metrics.totalUptime)}
             <br />
             Momento da última coleta:{" "}
-            {assetData.metrics.lastUptimeAt &&
+            {assetData.metrics?.lastUptimeAt &&
               format(
                 new Date(assetData.metrics.lastUptimeAt),
                 "dd/MM/yyyy HH:mm:ss"
               )}
           </Descriptions.Item>
           <Descriptions.Item label="Sensores:" span={2}>
-            {assetData.sensors.map((sensor) => (
+            {assetData.sensors?.map((sensor) => (
               <Tag color="blue" key={sensor}>
                 {sensor}
               </Tag>
             ))}
           </Descriptions.Item>
           <Descriptions.Item label="Saúde:">
-            {assetData.healthscore && (
+            {assetData?.healthscore && (
               <ProgressWrapper>
                 <Progress
                   percent={assetData.healthscore}
@@ -106,7 +108,7 @@ const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Estado:" span={3}>
-            {assetData.status && (
+            {assetData?.status && (
               <>
                 <Badge color={getColorByStatus(assetData.status)} />{" "}
                 {StatusTranslate[assetData.status]}
@@ -114,7 +116,7 @@ const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
             )}
           </Descriptions.Item>
           <Descriptions.Item label="Imagem (clique para ampliar):">
-            {assetData.image && <Image src={assetData.image} width={200} />}
+            {assetData?.image && <Image src={assetData.image} width={200} />}
           </Descriptions.Item>
         </Descriptions>
       )}
