@@ -3,7 +3,6 @@ import { Badge, Descriptions, Image, Progress, Spin, Tag } from "antd";
 import Text from "components/Typography/Text";
 import { format } from "date-fns";
 import { StatusTranslate } from "modules/DashboardModules/HomeModule/constants";
-import { LoadingWrapper } from "modules/DashboardModules/styles";
 import { getColorByStatus } from "modules/DashboardModules/utils/functions";
 import { useGetAssetsByIdQuery } from "services/assets/assets";
 import { type IAsset } from "services/assets/types";
@@ -42,9 +41,7 @@ const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
   return (
     <>
       {assetsLoading ? (
-        <LoadingWrapper>
-          <Spin />
-        </LoadingWrapper>
+        <Spin />
       ) : (
         <Descriptions title={assetData.name} bordered>
           {assetsIsError && (
