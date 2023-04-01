@@ -35,8 +35,6 @@ const ActionHeader = ({ userData }: ActionHeaderProps): JSX.Element => {
           form.resetFields();
         }
       });
-    toggleModal();
-    form.resetFields();
   };
 
   return (

@@ -43,7 +43,7 @@ const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
       {assetsLoading ? (
         <Spin />
       ) : (
-        <Descriptions title={assetData.name} bordered>
+        <Descriptions title={assetData.name} bordered column={3}>
           {assetsIsError && (
             <Text color={red[6]}>Erro ao carregar os dados do ativo</Text>
           )}
@@ -70,7 +70,7 @@ const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
               <>Potência: {assetData.specifications.power}W</>
             )}
           </Descriptions.Item>
-          <Descriptions.Item label="Métricas:">
+          <Descriptions.Item label="Métricas:" span={2}>
             Total de coletas: {assetData.metrics?.totalCollectsUptime}
             <br />
             Horas em funcionamento:{" "}
@@ -84,14 +84,14 @@ const AssetDetails = ({ assetId }: AssetDetailsProps): JSX.Element => {
                 "dd/MM/yyyy HH:mm:ss"
               )}
           </Descriptions.Item>
-          <Descriptions.Item label="Sensores:" span={2}>
+          <Descriptions.Item label="Sensores:" >
             {assetData.sensors?.map((sensor) => (
               <Tag color="blue" key={sensor}>
                 {sensor}
               </Tag>
             ))}
           </Descriptions.Item>
-          <Descriptions.Item label="Saúde:">
+          <Descriptions.Item label="Saúde:" span={2}>
             {assetData?.healthscore && (
               <ProgressWrapper>
                 <Progress
